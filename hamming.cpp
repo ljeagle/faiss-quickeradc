@@ -508,6 +508,25 @@ void hammings_knn(
     size_t ncodes,
     int order)
 {
+    FAISS_THROW_IF_NOT (ncodes % 8 == 0);
+
+    switch (ncodes) {
+        // hammings_knn_1 (ha, C64(a), C64(b), nb, false, true);
+        // hammings_knn_hc<faiss::HammingComputer8>
+        //  (8, ha, a, b, nb, false, true);
+        break;
+    case 16:
+        hammings_knn_hc<faiss::HammingComputer16>
+            (16, ha, a, b, nb, false, true);
+        break;
+    case 32:
+        hammings_knn_hc<faiss::HammingComputer32>
+            (32, ha, a, b, nb, false, true);
+        break;
+    default:
+        hammings_knn_hc<faiss::HammingComputerM8>
+            (ncodes, ha, a, b, nb, false, true);
+    }
     hammings_knn_hc(ha, a, b, nb, ncodes, order);
 }
 void hammings_knn_hc (

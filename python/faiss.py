@@ -1,8 +1,13 @@
+# Copyright (c) 2018-present, Thomson Licensing, SAS.
 # Copyright (c) 2015-present, Facebook, Inc.
 # All rights reserved.
 #
-# This source code is licensed under the BSD+Patents license found in the
-# LICENSE file in the root directory of this source tree.
+# Modifications related the introduction of Quicker ADC (Vectorized Product Quantization)
+# are licensed under the Clear BSD license found in the LICENSE file in the root directory
+# of this source tree.
+#
+# The rest of the source code is licensed under the BSD+Patents license found in the
+# LICENSE file in the root directory of this source tree 
 
 #@nolint
 
@@ -280,6 +285,15 @@ def handle_ParameterSpace(the_class):
                        crit, ops)
         return ops
     replace_method(the_class, 'explore', replacement_explore)
+
+    
+    def replacement_explore_limit_time(self, index, xq, crit, ts):
+        assert xq.shape == (crit.nq, index.d)
+        ops = OperatingPoints()
+        self.explore_limit_time_c(index, crit.nq, swig_ptr(xq), 
+                       crit, ts, ops)
+        return ops
+    replace_method(the_class, 'explore_limit_time', replacement_explore_limit_time)
 
 
 this_module = sys.modules[__name__]

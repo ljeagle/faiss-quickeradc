@@ -1571,6 +1571,50 @@ class ProductQuantizer(_object):
 ProductQuantizer_swigregister = _swigfaiss.ProductQuantizer_swigregister
 ProductQuantizer_swigregister(ProductQuantizer)
 
+
+def sgemm_(transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc):
+    return _swigfaiss.sgemm_(transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc)
+sgemm_ = _swigfaiss.sgemm_
+
+def init_hypercube(d, nbits, n, x, centroids):
+    return _swigfaiss.init_hypercube(d, nbits, n, x, centroids)
+init_hypercube = _swigfaiss.init_hypercube
+
+def init_hypercube_pca(d, nbits, n, x, centroids):
+    return _swigfaiss.init_hypercube_pca(d, nbits, n, x, centroids)
+init_hypercube_pca = _swigfaiss.init_hypercube_pca
+
+def _mm_cmple_epu8(x, y):
+    return _swigfaiss._mm_cmple_epu8(x, y)
+_mm_cmple_epu8 = _swigfaiss._mm_cmple_epu8
+
+def _mm_cmpge_epu8(x, y):
+    return _swigfaiss._mm_cmpge_epu8(x, y)
+_mm_cmpge_epu8 = _swigfaiss._mm_cmpge_epu8
+
+def _mm_cmpgt_epu8(x, y):
+    return _swigfaiss._mm_cmpgt_epu8(x, y)
+_mm_cmpgt_epu8 = _swigfaiss._mm_cmpgt_epu8
+
+def _mm_cmplt_epu8(x, y):
+    return _swigfaiss._mm_cmplt_epu8(x, y)
+_mm_cmplt_epu8 = _swigfaiss._mm_cmplt_epu8
+
+def _mm_cmple_epu16(x, y):
+    return _swigfaiss._mm_cmple_epu16(x, y)
+_mm_cmple_epu16 = _swigfaiss._mm_cmple_epu16
+
+def _mm_cmpge_epu16(x, y):
+    return _swigfaiss._mm_cmpge_epu16(x, y)
+_mm_cmpge_epu16 = _swigfaiss._mm_cmpge_epu16
+
+def _mm_cmpgt_epu16(x, y):
+    return _swigfaiss._mm_cmpgt_epu16(x, y)
+_mm_cmpgt_epu16 = _swigfaiss._mm_cmpgt_epu16
+
+def _mm_cmplt_epu16(x, y):
+    return _swigfaiss._mm_cmplt_epu16(x, y)
+_mm_cmplt_epu16 = _swigfaiss._mm_cmplt_epu16
 class VectorTransform(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, VectorTransform, name, value)
@@ -2650,6 +2694,57 @@ class MultiIndexQuantizer2(MultiIndexQuantizer):
     __del__ = lambda self: None
 MultiIndexQuantizer2_swigregister = _swigfaiss.MultiIndexQuantizer2_swigregister
 MultiIndexQuantizer2_swigregister(MultiIndexQuantizer2)
+
+class IndexVPQStats(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQStats, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQStats, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["nq"] = _swigfaiss.IndexVPQStats_nq_set
+    __swig_getmethods__["nq"] = _swigfaiss.IndexVPQStats_nq_get
+    if _newclass:
+        nq = _swig_property(_swigfaiss.IndexVPQStats_nq_get, _swigfaiss.IndexVPQStats_nq_set)
+    __swig_setmethods__["ncode"] = _swigfaiss.IndexVPQStats_ncode_set
+    __swig_getmethods__["ncode"] = _swigfaiss.IndexVPQStats_ncode_get
+    if _newclass:
+        ncode = _swig_property(_swigfaiss.IndexVPQStats_ncode_get, _swigfaiss.IndexVPQStats_ncode_set)
+
+    def __init__(self):
+        this = _swigfaiss.new_IndexVPQStats()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def reset(self):
+        return _swigfaiss.IndexVPQStats_reset(self)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQStats
+    __del__ = lambda self: None
+IndexVPQStats_swigregister = _swigfaiss.IndexVPQStats_swigregister
+IndexVPQStats_swigregister(IndexVPQStats)
+
+class AbstractIndexVPQ(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AbstractIndexVPQ, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, AbstractIndexVPQ, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["initial_scan_estim_param"] = _swigfaiss.AbstractIndexVPQ_initial_scan_estim_param_set
+    __swig_getmethods__["initial_scan_estim_param"] = _swigfaiss.AbstractIndexVPQ_initial_scan_estim_param_get
+    if _newclass:
+        initial_scan_estim_param = _swig_property(_swigfaiss.AbstractIndexVPQ_initial_scan_estim_param_get, _swigfaiss.AbstractIndexVPQ_initial_scan_estim_param_set)
+    __swig_destroy__ = _swigfaiss.delete_AbstractIndexVPQ
+    __del__ = lambda self: None
+
+    def __init__(self):
+        this = _swigfaiss.new_AbstractIndexVPQ()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+AbstractIndexVPQ_swigregister = _swigfaiss.AbstractIndexVPQ_swigregister
+AbstractIndexVPQ_swigregister(AbstractIndexVPQ)
 
 class InvertedLists(_object):
     __swig_setmethods__ = {}
@@ -4577,6 +4672,3624 @@ class IndexSplitVectors(Index):
 IndexSplitVectors_swigregister = _swigfaiss.IndexSplitVectors_swigregister
 IndexSplitVectors_swigregister(IndexSplitVectors)
 
+class IndexVPQ_2q6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2q6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2q6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2q6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2q6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2q6_pq_get, _swigfaiss.IndexVPQ_2q6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2q6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2q6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2q6_codes_get, _swigfaiss.IndexVPQ_2q6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2q6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2q6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2q6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2q6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2q6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2q6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2q6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2q6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2q6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2q6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2q6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2q6_search_type_get, _swigfaiss.IndexVPQ_2q6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2q6
+    __del__ = lambda self: None
+IndexVPQ_2q6_swigregister = _swigfaiss.IndexVPQ_2q6_swigregister
+IndexVPQ_2q6_swigregister(IndexVPQ_2q6)
+
+class IndexVPQ_2qa(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2qa, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2qa, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2qa_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2qa_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2qa_pq_get, _swigfaiss.IndexVPQ_2qa_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2qa_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2qa_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2qa_codes_get, _swigfaiss.IndexVPQ_2qa_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2qa(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2qa_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2qa_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2qa_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2qa_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2qa_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2qa_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2qa_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2qa_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2qa_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2qa_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2qa_search_type_get, _swigfaiss.IndexVPQ_2qa_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2qa
+    __del__ = lambda self: None
+IndexVPQ_2qa_swigregister = _swigfaiss.IndexVPQ_2qa_swigregister
+IndexVPQ_2qa_swigregister(IndexVPQ_2qa)
+
+class IndexVPQ_2qb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2qb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2qb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2qb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2qb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2qb_pq_get, _swigfaiss.IndexVPQ_2qb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2qb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2qb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2qb_codes_get, _swigfaiss.IndexVPQ_2qb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2qb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2qb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2qb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2qb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2qb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2qb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2qb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2qb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2qb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2qb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2qb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2qb_search_type_get, _swigfaiss.IndexVPQ_2qb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2qb
+    __del__ = lambda self: None
+IndexVPQ_2qb_swigregister = _swigfaiss.IndexVPQ_2qb_swigregister
+IndexVPQ_2qb_swigregister(IndexVPQ_2qb)
+
+class IndexVPQ_2q4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2q4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2q4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2q4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2q4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2q4_pq_get, _swigfaiss.IndexVPQ_2q4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2q4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2q4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2q4_codes_get, _swigfaiss.IndexVPQ_2q4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2q4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2q4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2q4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2q4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2q4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2q4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2q4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2q4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2q4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2q4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2q4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2q4_search_type_get, _swigfaiss.IndexVPQ_2q4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2q4
+    __del__ = lambda self: None
+IndexVPQ_2q4_swigregister = _swigfaiss.IndexVPQ_2q4_swigregister
+IndexVPQ_2q4_swigregister(IndexVPQ_2q4)
+
+class IndexVPQ_2Q4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2Q4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2Q4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2Q4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2Q4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2Q4_pq_get, _swigfaiss.IndexVPQ_2Q4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2Q4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2Q4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2Q4_codes_get, _swigfaiss.IndexVPQ_2Q4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2Q4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2Q4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2Q4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2Q4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2Q4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2Q4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2Q4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2Q4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2Q4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2Q4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2Q4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2Q4_search_type_get, _swigfaiss.IndexVPQ_2Q4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2Q4
+    __del__ = lambda self: None
+IndexVPQ_2Q4_swigregister = _swigfaiss.IndexVPQ_2Q4_swigregister
+IndexVPQ_2Q4_swigregister(IndexVPQ_2Q4)
+
+class IndexVPQ_2t6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2t6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2t6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2t6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2t6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2t6_pq_get, _swigfaiss.IndexVPQ_2t6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2t6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2t6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2t6_codes_get, _swigfaiss.IndexVPQ_2t6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2t6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2t6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2t6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2t6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2t6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2t6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2t6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2t6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2t6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2t6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2t6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2t6_search_type_get, _swigfaiss.IndexVPQ_2t6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2t6
+    __del__ = lambda self: None
+IndexVPQ_2t6_swigregister = _swigfaiss.IndexVPQ_2t6_swigregister
+IndexVPQ_2t6_swigregister(IndexVPQ_2t6)
+
+class IndexVPQ_2ta(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2ta, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2ta, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2ta_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2ta_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2ta_pq_get, _swigfaiss.IndexVPQ_2ta_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2ta_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2ta_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2ta_codes_get, _swigfaiss.IndexVPQ_2ta_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2ta(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2ta_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2ta_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2ta_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2ta_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2ta_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2ta_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2ta_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2ta_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2ta_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2ta_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2ta_search_type_get, _swigfaiss.IndexVPQ_2ta_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2ta
+    __del__ = lambda self: None
+IndexVPQ_2ta_swigregister = _swigfaiss.IndexVPQ_2ta_swigregister
+IndexVPQ_2ta_swigregister(IndexVPQ_2ta)
+
+class IndexVPQ_2tb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2tb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2tb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2tb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2tb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2tb_pq_get, _swigfaiss.IndexVPQ_2tb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2tb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2tb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2tb_codes_get, _swigfaiss.IndexVPQ_2tb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2tb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2tb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2tb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2tb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2tb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2tb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2tb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2tb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2tb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2tb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2tb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2tb_search_type_get, _swigfaiss.IndexVPQ_2tb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2tb
+    __del__ = lambda self: None
+IndexVPQ_2tb_swigregister = _swigfaiss.IndexVPQ_2tb_swigregister
+IndexVPQ_2tb_swigregister(IndexVPQ_2tb)
+
+class IndexVPQ_2t4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2t4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2t4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2t4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2t4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2t4_pq_get, _swigfaiss.IndexVPQ_2t4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2t4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2t4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2t4_codes_get, _swigfaiss.IndexVPQ_2t4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2t4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2t4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2t4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2t4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2t4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2t4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2t4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2t4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2t4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2t4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2t4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2t4_search_type_get, _swigfaiss.IndexVPQ_2t4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2t4
+    __del__ = lambda self: None
+IndexVPQ_2t4_swigregister = _swigfaiss.IndexVPQ_2t4_swigregister
+IndexVPQ_2t4_swigregister(IndexVPQ_2t4)
+
+class IndexVPQ_2T4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2T4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2T4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2T4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2T4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2T4_pq_get, _swigfaiss.IndexVPQ_2T4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2T4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2T4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2T4_codes_get, _swigfaiss.IndexVPQ_2T4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2T4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2T4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2T4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2T4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2T4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2T4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2T4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2T4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2T4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2T4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2T4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2T4_search_type_get, _swigfaiss.IndexVPQ_2T4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2T4
+    __del__ = lambda self: None
+IndexVPQ_2T4_swigregister = _swigfaiss.IndexVPQ_2T4_swigregister
+IndexVPQ_2T4_swigregister(IndexVPQ_2T4)
+
+class IndexVPQ_2s6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2s6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2s6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2s6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2s6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2s6_pq_get, _swigfaiss.IndexVPQ_2s6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2s6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2s6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2s6_codes_get, _swigfaiss.IndexVPQ_2s6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2s6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2s6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2s6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2s6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2s6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2s6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2s6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2s6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2s6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2s6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2s6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2s6_search_type_get, _swigfaiss.IndexVPQ_2s6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2s6
+    __del__ = lambda self: None
+IndexVPQ_2s6_swigregister = _swigfaiss.IndexVPQ_2s6_swigregister
+IndexVPQ_2s6_swigregister(IndexVPQ_2s6)
+
+class IndexVPQ_2sa(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2sa, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2sa, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2sa_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2sa_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2sa_pq_get, _swigfaiss.IndexVPQ_2sa_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2sa_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2sa_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2sa_codes_get, _swigfaiss.IndexVPQ_2sa_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2sa(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2sa_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2sa_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2sa_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2sa_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2sa_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2sa_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2sa_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2sa_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2sa_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2sa_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2sa_search_type_get, _swigfaiss.IndexVPQ_2sa_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2sa
+    __del__ = lambda self: None
+IndexVPQ_2sa_swigregister = _swigfaiss.IndexVPQ_2sa_swigregister
+IndexVPQ_2sa_swigregister(IndexVPQ_2sa)
+
+class IndexVPQ_2sb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2sb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2sb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2sb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2sb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2sb_pq_get, _swigfaiss.IndexVPQ_2sb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2sb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2sb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2sb_codes_get, _swigfaiss.IndexVPQ_2sb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2sb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2sb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2sb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2sb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2sb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2sb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2sb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2sb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2sb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2sb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2sb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2sb_search_type_get, _swigfaiss.IndexVPQ_2sb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2sb
+    __del__ = lambda self: None
+IndexVPQ_2sb_swigregister = _swigfaiss.IndexVPQ_2sb_swigregister
+IndexVPQ_2sb_swigregister(IndexVPQ_2sb)
+
+class IndexVPQ_2s4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2s4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2s4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2s4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2s4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2s4_pq_get, _swigfaiss.IndexVPQ_2s4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2s4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2s4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2s4_codes_get, _swigfaiss.IndexVPQ_2s4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2s4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2s4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2s4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2s4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2s4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2s4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2s4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2s4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2s4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2s4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2s4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2s4_search_type_get, _swigfaiss.IndexVPQ_2s4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2s4
+    __del__ = lambda self: None
+IndexVPQ_2s4_swigregister = _swigfaiss.IndexVPQ_2s4_swigregister
+IndexVPQ_2s4_swigregister(IndexVPQ_2s4)
+
+class IndexVPQ_2S4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2S4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2S4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2S4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2S4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2S4_pq_get, _swigfaiss.IndexVPQ_2S4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2S4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2S4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2S4_codes_get, _swigfaiss.IndexVPQ_2S4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2S4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2S4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2S4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2S4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2S4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2S4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2S4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2S4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2S4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2S4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2S4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2S4_search_type_get, _swigfaiss.IndexVPQ_2S4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2S4
+    __del__ = lambda self: None
+IndexVPQ_2S4_swigregister = _swigfaiss.IndexVPQ_2S4_swigregister
+IndexVPQ_2S4_swigregister(IndexVPQ_2S4)
+
+class IndexVPQ_2v6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2v6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2v6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2v6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2v6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2v6_pq_get, _swigfaiss.IndexVPQ_2v6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2v6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2v6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2v6_codes_get, _swigfaiss.IndexVPQ_2v6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2v6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2v6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2v6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2v6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2v6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2v6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2v6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2v6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2v6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2v6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2v6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2v6_search_type_get, _swigfaiss.IndexVPQ_2v6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2v6
+    __del__ = lambda self: None
+IndexVPQ_2v6_swigregister = _swigfaiss.IndexVPQ_2v6_swigregister
+IndexVPQ_2v6_swigregister(IndexVPQ_2v6)
+
+class IndexVPQ_2va(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2va, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2va, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2va_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2va_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2va_pq_get, _swigfaiss.IndexVPQ_2va_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2va_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2va_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2va_codes_get, _swigfaiss.IndexVPQ_2va_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2va(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2va_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2va_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2va_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2va_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2va_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2va_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2va_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2va_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2va_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2va_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2va_search_type_get, _swigfaiss.IndexVPQ_2va_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2va
+    __del__ = lambda self: None
+IndexVPQ_2va_swigregister = _swigfaiss.IndexVPQ_2va_swigregister
+IndexVPQ_2va_swigregister(IndexVPQ_2va)
+
+class IndexVPQ_2vb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2vb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2vb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2vb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2vb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2vb_pq_get, _swigfaiss.IndexVPQ_2vb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2vb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2vb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2vb_codes_get, _swigfaiss.IndexVPQ_2vb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2vb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2vb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2vb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2vb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2vb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2vb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2vb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2vb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2vb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2vb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2vb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2vb_search_type_get, _swigfaiss.IndexVPQ_2vb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2vb
+    __del__ = lambda self: None
+IndexVPQ_2vb_swigregister = _swigfaiss.IndexVPQ_2vb_swigregister
+IndexVPQ_2vb_swigregister(IndexVPQ_2vb)
+
+class IndexVPQ_2v4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2v4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2v4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2v4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2v4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2v4_pq_get, _swigfaiss.IndexVPQ_2v4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2v4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2v4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2v4_codes_get, _swigfaiss.IndexVPQ_2v4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2v4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2v4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2v4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2v4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2v4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2v4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2v4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2v4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2v4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2v4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2v4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2v4_search_type_get, _swigfaiss.IndexVPQ_2v4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2v4
+    __del__ = lambda self: None
+IndexVPQ_2v4_swigregister = _swigfaiss.IndexVPQ_2v4_swigregister
+IndexVPQ_2v4_swigregister(IndexVPQ_2v4)
+
+class IndexVPQ_2W4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2W4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2W4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2W4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2W4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2W4_pq_get, _swigfaiss.IndexVPQ_2W4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2W4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2W4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2W4_codes_get, _swigfaiss.IndexVPQ_2W4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2W4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2W4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2W4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2W4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2W4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2W4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2W4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2W4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2W4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2W4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2W4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2W4_search_type_get, _swigfaiss.IndexVPQ_2W4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2W4
+    __del__ = lambda self: None
+IndexVPQ_2W4_swigregister = _swigfaiss.IndexVPQ_2W4_swigregister
+IndexVPQ_2W4_swigregister(IndexVPQ_2W4)
+
+class IndexVPQ_2V4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2V4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2V4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2V4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2V4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2V4_pq_get, _swigfaiss.IndexVPQ_2V4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2V4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2V4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2V4_codes_get, _swigfaiss.IndexVPQ_2V4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2V4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2V4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2V4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2V4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2V4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2V4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2V4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2V4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2V4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2V4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2V4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2V4_search_type_get, _swigfaiss.IndexVPQ_2V4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2V4
+    __del__ = lambda self: None
+IndexVPQ_2V4_swigregister = _swigfaiss.IndexVPQ_2V4_swigregister
+IndexVPQ_2V4_swigregister(IndexVPQ_2V4)
+
+class IndexVPQ_2vc(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2vc, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2vc, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2vc_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2vc_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2vc_pq_get, _swigfaiss.IndexVPQ_2vc_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2vc_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2vc_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2vc_codes_get, _swigfaiss.IndexVPQ_2vc_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2vc(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2vc_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2vc_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2vc_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2vc_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2vc_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2vc_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2vc_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2vc_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2vc_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2vc_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2vc_search_type_get, _swigfaiss.IndexVPQ_2vc_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2vc
+    __del__ = lambda self: None
+IndexVPQ_2vc_swigregister = _swigfaiss.IndexVPQ_2vc_swigregister
+IndexVPQ_2vc_swigregister(IndexVPQ_2vc)
+
+class IndexVPQ_2v8(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2v8, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2v8, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2v8_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2v8_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2v8_pq_get, _swigfaiss.IndexVPQ_2v8_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2v8_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2v8_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2v8_codes_get, _swigfaiss.IndexVPQ_2v8_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2v8(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2v8_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2v8_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2v8_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2v8_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2v8_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2v8_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2v8_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2v8_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2v8_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2v8_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2v8_search_type_get, _swigfaiss.IndexVPQ_2v8_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2v8
+    __del__ = lambda self: None
+IndexVPQ_2v8_swigregister = _swigfaiss.IndexVPQ_2v8_swigregister
+IndexVPQ_2v8_swigregister(IndexVPQ_2v8)
+
+class IndexVPQ_4q6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4q6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4q6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4q6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4q6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4q6_pq_get, _swigfaiss.IndexVPQ_4q6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4q6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4q6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4q6_codes_get, _swigfaiss.IndexVPQ_4q6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4q6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4q6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4q6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4q6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4q6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4q6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4q6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4q6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4q6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4q6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4q6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4q6_search_type_get, _swigfaiss.IndexVPQ_4q6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4q6
+    __del__ = lambda self: None
+IndexVPQ_4q6_swigregister = _swigfaiss.IndexVPQ_4q6_swigregister
+IndexVPQ_4q6_swigregister(IndexVPQ_4q6)
+
+class IndexVPQ_4qa(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4qa, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4qa, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4qa_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4qa_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4qa_pq_get, _swigfaiss.IndexVPQ_4qa_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4qa_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4qa_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4qa_codes_get, _swigfaiss.IndexVPQ_4qa_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4qa(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4qa_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4qa_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4qa_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4qa_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4qa_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4qa_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4qa_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4qa_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4qa_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4qa_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4qa_search_type_get, _swigfaiss.IndexVPQ_4qa_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4qa
+    __del__ = lambda self: None
+IndexVPQ_4qa_swigregister = _swigfaiss.IndexVPQ_4qa_swigregister
+IndexVPQ_4qa_swigregister(IndexVPQ_4qa)
+
+class IndexVPQ_4qb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4qb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4qb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4qb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4qb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4qb_pq_get, _swigfaiss.IndexVPQ_4qb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4qb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4qb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4qb_codes_get, _swigfaiss.IndexVPQ_4qb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4qb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4qb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4qb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4qb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4qb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4qb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4qb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4qb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4qb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4qb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4qb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4qb_search_type_get, _swigfaiss.IndexVPQ_4qb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4qb
+    __del__ = lambda self: None
+IndexVPQ_4qb_swigregister = _swigfaiss.IndexVPQ_4qb_swigregister
+IndexVPQ_4qb_swigregister(IndexVPQ_4qb)
+
+class IndexVPQ_4q4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4q4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4q4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4q4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4q4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4q4_pq_get, _swigfaiss.IndexVPQ_4q4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4q4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4q4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4q4_codes_get, _swigfaiss.IndexVPQ_4q4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4q4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4q4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4q4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4q4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4q4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4q4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4q4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4q4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4q4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4q4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4q4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4q4_search_type_get, _swigfaiss.IndexVPQ_4q4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4q4
+    __del__ = lambda self: None
+IndexVPQ_4q4_swigregister = _swigfaiss.IndexVPQ_4q4_swigregister
+IndexVPQ_4q4_swigregister(IndexVPQ_4q4)
+
+class IndexVPQ_4Q4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4Q4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4Q4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4Q4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4Q4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4Q4_pq_get, _swigfaiss.IndexVPQ_4Q4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4Q4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4Q4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4Q4_codes_get, _swigfaiss.IndexVPQ_4Q4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4Q4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4Q4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4Q4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4Q4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4Q4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4Q4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4Q4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4Q4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4Q4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4Q4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4Q4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4Q4_search_type_get, _swigfaiss.IndexVPQ_4Q4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4Q4
+    __del__ = lambda self: None
+IndexVPQ_4Q4_swigregister = _swigfaiss.IndexVPQ_4Q4_swigregister
+IndexVPQ_4Q4_swigregister(IndexVPQ_4Q4)
+
+class IndexVPQ_4t6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4t6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4t6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4t6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4t6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4t6_pq_get, _swigfaiss.IndexVPQ_4t6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4t6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4t6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4t6_codes_get, _swigfaiss.IndexVPQ_4t6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4t6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4t6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4t6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4t6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4t6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4t6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4t6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4t6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4t6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4t6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4t6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4t6_search_type_get, _swigfaiss.IndexVPQ_4t6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4t6
+    __del__ = lambda self: None
+IndexVPQ_4t6_swigregister = _swigfaiss.IndexVPQ_4t6_swigregister
+IndexVPQ_4t6_swigregister(IndexVPQ_4t6)
+
+class IndexVPQ_4ta(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4ta, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4ta, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4ta_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4ta_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4ta_pq_get, _swigfaiss.IndexVPQ_4ta_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4ta_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4ta_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4ta_codes_get, _swigfaiss.IndexVPQ_4ta_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4ta(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4ta_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4ta_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4ta_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4ta_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4ta_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4ta_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4ta_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4ta_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4ta_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4ta_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4ta_search_type_get, _swigfaiss.IndexVPQ_4ta_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4ta
+    __del__ = lambda self: None
+IndexVPQ_4ta_swigregister = _swigfaiss.IndexVPQ_4ta_swigregister
+IndexVPQ_4ta_swigregister(IndexVPQ_4ta)
+
+class IndexVPQ_4tb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4tb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4tb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4tb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4tb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4tb_pq_get, _swigfaiss.IndexVPQ_4tb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4tb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4tb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4tb_codes_get, _swigfaiss.IndexVPQ_4tb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4tb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4tb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4tb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4tb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4tb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4tb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4tb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4tb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4tb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4tb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4tb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4tb_search_type_get, _swigfaiss.IndexVPQ_4tb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4tb
+    __del__ = lambda self: None
+IndexVPQ_4tb_swigregister = _swigfaiss.IndexVPQ_4tb_swigregister
+IndexVPQ_4tb_swigregister(IndexVPQ_4tb)
+
+class IndexVPQ_4t4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4t4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4t4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4t4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4t4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4t4_pq_get, _swigfaiss.IndexVPQ_4t4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4t4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4t4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4t4_codes_get, _swigfaiss.IndexVPQ_4t4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4t4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4t4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4t4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4t4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4t4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4t4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4t4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4t4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4t4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4t4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4t4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4t4_search_type_get, _swigfaiss.IndexVPQ_4t4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4t4
+    __del__ = lambda self: None
+IndexVPQ_4t4_swigregister = _swigfaiss.IndexVPQ_4t4_swigregister
+IndexVPQ_4t4_swigregister(IndexVPQ_4t4)
+
+class IndexVPQ_4T4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4T4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4T4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4T4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4T4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4T4_pq_get, _swigfaiss.IndexVPQ_4T4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4T4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4T4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4T4_codes_get, _swigfaiss.IndexVPQ_4T4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4T4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4T4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4T4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4T4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4T4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4T4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4T4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4T4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4T4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4T4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4T4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4T4_search_type_get, _swigfaiss.IndexVPQ_4T4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4T4
+    __del__ = lambda self: None
+IndexVPQ_4T4_swigregister = _swigfaiss.IndexVPQ_4T4_swigregister
+IndexVPQ_4T4_swigregister(IndexVPQ_4T4)
+
+class IndexVPQ_4s6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4s6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4s6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4s6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4s6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4s6_pq_get, _swigfaiss.IndexVPQ_4s6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4s6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4s6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4s6_codes_get, _swigfaiss.IndexVPQ_4s6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4s6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4s6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4s6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4s6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4s6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4s6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4s6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4s6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4s6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4s6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4s6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4s6_search_type_get, _swigfaiss.IndexVPQ_4s6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4s6
+    __del__ = lambda self: None
+IndexVPQ_4s6_swigregister = _swigfaiss.IndexVPQ_4s6_swigregister
+IndexVPQ_4s6_swigregister(IndexVPQ_4s6)
+
+class IndexVPQ_4sa(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4sa, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4sa, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4sa_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4sa_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4sa_pq_get, _swigfaiss.IndexVPQ_4sa_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4sa_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4sa_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4sa_codes_get, _swigfaiss.IndexVPQ_4sa_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4sa(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4sa_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4sa_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4sa_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4sa_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4sa_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4sa_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4sa_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4sa_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4sa_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4sa_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4sa_search_type_get, _swigfaiss.IndexVPQ_4sa_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4sa
+    __del__ = lambda self: None
+IndexVPQ_4sa_swigregister = _swigfaiss.IndexVPQ_4sa_swigregister
+IndexVPQ_4sa_swigregister(IndexVPQ_4sa)
+
+class IndexVPQ_4sb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4sb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4sb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4sb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4sb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4sb_pq_get, _swigfaiss.IndexVPQ_4sb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4sb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4sb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4sb_codes_get, _swigfaiss.IndexVPQ_4sb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4sb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4sb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4sb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4sb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4sb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4sb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4sb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4sb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4sb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4sb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4sb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4sb_search_type_get, _swigfaiss.IndexVPQ_4sb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4sb
+    __del__ = lambda self: None
+IndexVPQ_4sb_swigregister = _swigfaiss.IndexVPQ_4sb_swigregister
+IndexVPQ_4sb_swigregister(IndexVPQ_4sb)
+
+class IndexVPQ_4s4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4s4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4s4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4s4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4s4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4s4_pq_get, _swigfaiss.IndexVPQ_4s4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4s4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4s4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4s4_codes_get, _swigfaiss.IndexVPQ_4s4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4s4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4s4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4s4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4s4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4s4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4s4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4s4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4s4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4s4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4s4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4s4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4s4_search_type_get, _swigfaiss.IndexVPQ_4s4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4s4
+    __del__ = lambda self: None
+IndexVPQ_4s4_swigregister = _swigfaiss.IndexVPQ_4s4_swigregister
+IndexVPQ_4s4_swigregister(IndexVPQ_4s4)
+
+class IndexVPQ_4S4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4S4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4S4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4S4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4S4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4S4_pq_get, _swigfaiss.IndexVPQ_4S4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4S4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4S4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4S4_codes_get, _swigfaiss.IndexVPQ_4S4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4S4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4S4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4S4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4S4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4S4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4S4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4S4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4S4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4S4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4S4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4S4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4S4_search_type_get, _swigfaiss.IndexVPQ_4S4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4S4
+    __del__ = lambda self: None
+IndexVPQ_4S4_swigregister = _swigfaiss.IndexVPQ_4S4_swigregister
+IndexVPQ_4S4_swigregister(IndexVPQ_4S4)
+
+class IndexVPQ_4v6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4v6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4v6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4v6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4v6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4v6_pq_get, _swigfaiss.IndexVPQ_4v6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4v6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4v6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4v6_codes_get, _swigfaiss.IndexVPQ_4v6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4v6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4v6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4v6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4v6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4v6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4v6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4v6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4v6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4v6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4v6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4v6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4v6_search_type_get, _swigfaiss.IndexVPQ_4v6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4v6
+    __del__ = lambda self: None
+IndexVPQ_4v6_swigregister = _swigfaiss.IndexVPQ_4v6_swigregister
+IndexVPQ_4v6_swigregister(IndexVPQ_4v6)
+
+class IndexVPQ_4va(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4va, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4va, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4va_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4va_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4va_pq_get, _swigfaiss.IndexVPQ_4va_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4va_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4va_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4va_codes_get, _swigfaiss.IndexVPQ_4va_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4va(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4va_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4va_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4va_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4va_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4va_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4va_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4va_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4va_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4va_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4va_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4va_search_type_get, _swigfaiss.IndexVPQ_4va_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4va
+    __del__ = lambda self: None
+IndexVPQ_4va_swigregister = _swigfaiss.IndexVPQ_4va_swigregister
+IndexVPQ_4va_swigregister(IndexVPQ_4va)
+
+class IndexVPQ_4vb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4vb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4vb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4vb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4vb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4vb_pq_get, _swigfaiss.IndexVPQ_4vb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4vb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4vb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4vb_codes_get, _swigfaiss.IndexVPQ_4vb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4vb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4vb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4vb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4vb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4vb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4vb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4vb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4vb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4vb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4vb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4vb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4vb_search_type_get, _swigfaiss.IndexVPQ_4vb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4vb
+    __del__ = lambda self: None
+IndexVPQ_4vb_swigregister = _swigfaiss.IndexVPQ_4vb_swigregister
+IndexVPQ_4vb_swigregister(IndexVPQ_4vb)
+
+class IndexVPQ_4v4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4v4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4v4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4v4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4v4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4v4_pq_get, _swigfaiss.IndexVPQ_4v4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4v4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4v4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4v4_codes_get, _swigfaiss.IndexVPQ_4v4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4v4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4v4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4v4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4v4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4v4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4v4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4v4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4v4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4v4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4v4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4v4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4v4_search_type_get, _swigfaiss.IndexVPQ_4v4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4v4
+    __del__ = lambda self: None
+IndexVPQ_4v4_swigregister = _swigfaiss.IndexVPQ_4v4_swigregister
+IndexVPQ_4v4_swigregister(IndexVPQ_4v4)
+
+class IndexVPQ_4W4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4W4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4W4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4W4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4W4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4W4_pq_get, _swigfaiss.IndexVPQ_4W4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4W4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4W4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4W4_codes_get, _swigfaiss.IndexVPQ_4W4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4W4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4W4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4W4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4W4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4W4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4W4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4W4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4W4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4W4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4W4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4W4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4W4_search_type_get, _swigfaiss.IndexVPQ_4W4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4W4
+    __del__ = lambda self: None
+IndexVPQ_4W4_swigregister = _swigfaiss.IndexVPQ_4W4_swigregister
+IndexVPQ_4W4_swigregister(IndexVPQ_4W4)
+
+class IndexVPQ_4V4(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4V4, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4V4, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4V4_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4V4_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4V4_pq_get, _swigfaiss.IndexVPQ_4V4_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4V4_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4V4_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4V4_codes_get, _swigfaiss.IndexVPQ_4V4_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4V4(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4V4_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4V4_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4V4_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4V4_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4V4_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4V4_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4V4_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4V4_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4V4_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4V4_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4V4_search_type_get, _swigfaiss.IndexVPQ_4V4_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4V4
+    __del__ = lambda self: None
+IndexVPQ_4V4_swigregister = _swigfaiss.IndexVPQ_4V4_swigregister
+IndexVPQ_4V4_swigregister(IndexVPQ_4V4)
+
+class IndexVPQ_4vc(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4vc, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4vc, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4vc_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4vc_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4vc_pq_get, _swigfaiss.IndexVPQ_4vc_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4vc_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4vc_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4vc_codes_get, _swigfaiss.IndexVPQ_4vc_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4vc(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4vc_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4vc_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4vc_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4vc_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4vc_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4vc_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4vc_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4vc_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4vc_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4vc_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4vc_search_type_get, _swigfaiss.IndexVPQ_4vc_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4vc
+    __del__ = lambda self: None
+IndexVPQ_4vc_swigregister = _swigfaiss.IndexVPQ_4vc_swigregister
+IndexVPQ_4vc_swigregister(IndexVPQ_4vc)
+
+class IndexVPQ_4v8(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4v8, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4v8, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4v8_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4v8_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4v8_pq_get, _swigfaiss.IndexVPQ_4v8_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4v8_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4v8_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4v8_codes_get, _swigfaiss.IndexVPQ_4v8_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4v8(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4v8_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4v8_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4v8_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4v8_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4v8_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4v8_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4v8_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4v8_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4v8_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4v8_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4v8_search_type_get, _swigfaiss.IndexVPQ_4v8_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4v8
+    __del__ = lambda self: None
+IndexVPQ_4v8_swigregister = _swigfaiss.IndexVPQ_4v8_swigregister
+IndexVPQ_4v8_swigregister(IndexVPQ_4v8)
+
+class IndexVPQ_2s8(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2s8, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2s8, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2s8_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2s8_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2s8_pq_get, _swigfaiss.IndexVPQ_2s8_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2s8_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2s8_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2s8_codes_get, _swigfaiss.IndexVPQ_2s8_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2s8(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2s8_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2s8_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2s8_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2s8_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2s8_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2s8_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2s8_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2s8_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2s8_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2s8_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2s8_search_type_get, _swigfaiss.IndexVPQ_2s8_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2s8
+    __del__ = lambda self: None
+IndexVPQ_2s8_swigregister = _swigfaiss.IndexVPQ_2s8_swigregister
+IndexVPQ_2s8_swigregister(IndexVPQ_2s8)
+
+class IndexVPQ_1s8(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_1s8, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_1s8, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_1s8_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_1s8_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_1s8_pq_get, _swigfaiss.IndexVPQ_1s8_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_1s8_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_1s8_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_1s8_codes_get, _swigfaiss.IndexVPQ_1s8_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_1s8(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_1s8_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_1s8_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_1s8_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_1s8_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_1s8_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_1s8_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_1s8_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_1s8_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_1s8_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_1s8_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_1s8_search_type_get, _swigfaiss.IndexVPQ_1s8_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_1s8
+    __del__ = lambda self: None
+IndexVPQ_1s8_swigregister = _swigfaiss.IndexVPQ_1s8_swigregister
+IndexVPQ_1s8_swigregister(IndexVPQ_1s8)
+
+class IndexVPQ_4s8(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4s8, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4s8, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4s8_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4s8_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4s8_pq_get, _swigfaiss.IndexVPQ_4s8_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4s8_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4s8_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4s8_codes_get, _swigfaiss.IndexVPQ_4s8_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4s8(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4s8_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4s8_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4s8_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4s8_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4s8_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4s8_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4s8_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4s8_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4s8_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4s8_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4s8_search_type_get, _swigfaiss.IndexVPQ_4s8_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4s8
+    __del__ = lambda self: None
+IndexVPQ_4s8_swigregister = _swigfaiss.IndexVPQ_4s8_swigregister
+IndexVPQ_4s8_swigregister(IndexVPQ_4s8)
+
+class IndexVPQ_2q8(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2q8, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2q8, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2q8_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2q8_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2q8_pq_get, _swigfaiss.IndexVPQ_2q8_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2q8_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2q8_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2q8_codes_get, _swigfaiss.IndexVPQ_2q8_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2q8(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2q8_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2q8_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2q8_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2q8_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2q8_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2q8_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2q8_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2q8_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2q8_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2q8_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2q8_search_type_get, _swigfaiss.IndexVPQ_2q8_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2q8
+    __del__ = lambda self: None
+IndexVPQ_2q8_swigregister = _swigfaiss.IndexVPQ_2q8_swigregister
+IndexVPQ_2q8_swigregister(IndexVPQ_2q8)
+
+class IndexVPQ_1q8(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_1q8, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_1q8, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_1q8_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_1q8_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_1q8_pq_get, _swigfaiss.IndexVPQ_1q8_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_1q8_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_1q8_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_1q8_codes_get, _swigfaiss.IndexVPQ_1q8_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_1q8(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_1q8_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_1q8_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_1q8_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_1q8_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_1q8_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_1q8_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_1q8_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_1q8_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_1q8_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_1q8_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_1q8_search_type_get, _swigfaiss.IndexVPQ_1q8_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_1q8
+    __del__ = lambda self: None
+IndexVPQ_1q8_swigregister = _swigfaiss.IndexVPQ_1q8_swigregister
+IndexVPQ_1q8_swigregister(IndexVPQ_1q8)
+
+class IndexVPQ_4q8(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4q8, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4q8, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4q8_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4q8_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4q8_pq_get, _swigfaiss.IndexVPQ_4q8_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4q8_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4q8_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4q8_codes_get, _swigfaiss.IndexVPQ_4q8_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4q8(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4q8_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4q8_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4q8_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4q8_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4q8_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4q8_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4q8_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4q8_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4q8_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4q8_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4q8_search_type_get, _swigfaiss.IndexVPQ_4q8_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4q8
+    __del__ = lambda self: None
+IndexVPQ_4q8_swigregister = _swigfaiss.IndexVPQ_4q8_swigregister
+IndexVPQ_4q8_swigregister(IndexVPQ_4q8)
+
+class IndexVPQ_2s7(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2s7, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2s7, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2s7_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2s7_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2s7_pq_get, _swigfaiss.IndexVPQ_2s7_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2s7_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2s7_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2s7_codes_get, _swigfaiss.IndexVPQ_2s7_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2s7(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2s7_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2s7_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2s7_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2s7_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2s7_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2s7_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2s7_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2s7_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2s7_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2s7_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2s7_search_type_get, _swigfaiss.IndexVPQ_2s7_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2s7
+    __del__ = lambda self: None
+IndexVPQ_2s7_swigregister = _swigfaiss.IndexVPQ_2s7_swigregister
+IndexVPQ_2s7_swigregister(IndexVPQ_2s7)
+
+class IndexVPQ_1s7(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_1s7, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_1s7, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_1s7_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_1s7_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_1s7_pq_get, _swigfaiss.IndexVPQ_1s7_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_1s7_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_1s7_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_1s7_codes_get, _swigfaiss.IndexVPQ_1s7_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_1s7(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_1s7_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_1s7_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_1s7_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_1s7_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_1s7_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_1s7_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_1s7_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_1s7_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_1s7_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_1s7_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_1s7_search_type_get, _swigfaiss.IndexVPQ_1s7_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_1s7
+    __del__ = lambda self: None
+IndexVPQ_1s7_swigregister = _swigfaiss.IndexVPQ_1s7_swigregister
+IndexVPQ_1s7_swigregister(IndexVPQ_1s7)
+
+class IndexVPQ_4s7(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4s7, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4s7, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4s7_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4s7_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4s7_pq_get, _swigfaiss.IndexVPQ_4s7_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4s7_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4s7_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4s7_codes_get, _swigfaiss.IndexVPQ_4s7_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4s7(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4s7_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4s7_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4s7_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4s7_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4s7_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4s7_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4s7_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4s7_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4s7_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4s7_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4s7_search_type_get, _swigfaiss.IndexVPQ_4s7_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4s7
+    __del__ = lambda self: None
+IndexVPQ_4s7_swigregister = _swigfaiss.IndexVPQ_4s7_swigregister
+IndexVPQ_4s7_swigregister(IndexVPQ_4s7)
+
+class IndexVPQ_2q7(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2q7, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2q7, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2q7_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2q7_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2q7_pq_get, _swigfaiss.IndexVPQ_2q7_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2q7_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2q7_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2q7_codes_get, _swigfaiss.IndexVPQ_2q7_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2q7(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2q7_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2q7_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2q7_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2q7_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2q7_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2q7_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2q7_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2q7_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2q7_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2q7_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2q7_search_type_get, _swigfaiss.IndexVPQ_2q7_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2q7
+    __del__ = lambda self: None
+IndexVPQ_2q7_swigregister = _swigfaiss.IndexVPQ_2q7_swigregister
+IndexVPQ_2q7_swigregister(IndexVPQ_2q7)
+
+class IndexVPQ_1q7(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_1q7, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_1q7, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_1q7_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_1q7_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_1q7_pq_get, _swigfaiss.IndexVPQ_1q7_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_1q7_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_1q7_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_1q7_codes_get, _swigfaiss.IndexVPQ_1q7_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_1q7(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_1q7_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_1q7_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_1q7_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_1q7_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_1q7_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_1q7_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_1q7_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_1q7_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_1q7_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_1q7_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_1q7_search_type_get, _swigfaiss.IndexVPQ_1q7_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_1q7
+    __del__ = lambda self: None
+IndexVPQ_1q7_swigregister = _swigfaiss.IndexVPQ_1q7_swigregister
+IndexVPQ_1q7_swigregister(IndexVPQ_1q7)
+
+class IndexVPQ_4q7(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4q7, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4q7, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4q7_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4q7_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4q7_pq_get, _swigfaiss.IndexVPQ_4q7_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4q7_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4q7_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4q7_codes_get, _swigfaiss.IndexVPQ_4q7_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4q7(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4q7_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4q7_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4q7_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4q7_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4q7_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4q7_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4q7_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4q7_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4q7_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4q7_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4q7_search_type_get, _swigfaiss.IndexVPQ_4q7_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4q7
+    __del__ = lambda self: None
+IndexVPQ_4q7_swigregister = _swigfaiss.IndexVPQ_4q7_swigregister
+IndexVPQ_4q7_swigregister(IndexVPQ_4q7)
+
+class IndexVPQ_2sd(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2sd, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2sd, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2sd_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2sd_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2sd_pq_get, _swigfaiss.IndexVPQ_2sd_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2sd_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2sd_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2sd_codes_get, _swigfaiss.IndexVPQ_2sd_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2sd(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2sd_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2sd_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2sd_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2sd_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2sd_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2sd_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2sd_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2sd_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2sd_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2sd_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2sd_search_type_get, _swigfaiss.IndexVPQ_2sd_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2sd
+    __del__ = lambda self: None
+IndexVPQ_2sd_swigregister = _swigfaiss.IndexVPQ_2sd_swigregister
+IndexVPQ_2sd_swigregister(IndexVPQ_2sd)
+
+class IndexVPQ_1sd(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_1sd, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_1sd, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_1sd_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_1sd_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_1sd_pq_get, _swigfaiss.IndexVPQ_1sd_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_1sd_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_1sd_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_1sd_codes_get, _swigfaiss.IndexVPQ_1sd_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_1sd(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_1sd_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_1sd_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_1sd_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_1sd_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_1sd_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_1sd_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_1sd_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_1sd_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_1sd_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_1sd_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_1sd_search_type_get, _swigfaiss.IndexVPQ_1sd_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_1sd
+    __del__ = lambda self: None
+IndexVPQ_1sd_swigregister = _swigfaiss.IndexVPQ_1sd_swigregister
+IndexVPQ_1sd_swigregister(IndexVPQ_1sd)
+
+class IndexVPQ_4sd(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4sd, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4sd, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4sd_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4sd_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4sd_pq_get, _swigfaiss.IndexVPQ_4sd_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4sd_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4sd_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4sd_codes_get, _swigfaiss.IndexVPQ_4sd_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4sd(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4sd_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4sd_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4sd_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4sd_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4sd_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4sd_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4sd_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4sd_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4sd_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4sd_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4sd_search_type_get, _swigfaiss.IndexVPQ_4sd_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4sd
+    __del__ = lambda self: None
+IndexVPQ_4sd_swigregister = _swigfaiss.IndexVPQ_4sd_swigregister
+IndexVPQ_4sd_swigregister(IndexVPQ_4sd)
+
+class IndexVPQ_2qd(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_2qd, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_2qd, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_2qd_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_2qd_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_2qd_pq_get, _swigfaiss.IndexVPQ_2qd_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_2qd_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_2qd_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_2qd_codes_get, _swigfaiss.IndexVPQ_2qd_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_2qd(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_2qd_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_2qd_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_2qd_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_2qd_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_2qd_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_2qd_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_2qd_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_2qd_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_2qd_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_2qd_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_2qd_search_type_get, _swigfaiss.IndexVPQ_2qd_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_2qd
+    __del__ = lambda self: None
+IndexVPQ_2qd_swigregister = _swigfaiss.IndexVPQ_2qd_swigregister
+IndexVPQ_2qd_swigregister(IndexVPQ_2qd)
+
+class IndexVPQ_1qd(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_1qd, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_1qd, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_1qd_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_1qd_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_1qd_pq_get, _swigfaiss.IndexVPQ_1qd_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_1qd_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_1qd_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_1qd_codes_get, _swigfaiss.IndexVPQ_1qd_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_1qd(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_1qd_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_1qd_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_1qd_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_1qd_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_1qd_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_1qd_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_1qd_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_1qd_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_1qd_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_1qd_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_1qd_search_type_get, _swigfaiss.IndexVPQ_1qd_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_1qd
+    __del__ = lambda self: None
+IndexVPQ_1qd_swigregister = _swigfaiss.IndexVPQ_1qd_swigregister
+IndexVPQ_1qd_swigregister(IndexVPQ_1qd)
+
+class IndexVPQ_4qd(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_4qd, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_4qd, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_4qd_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_4qd_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_4qd_pq_get, _swigfaiss.IndexVPQ_4qd_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_4qd_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_4qd_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_4qd_codes_get, _swigfaiss.IndexVPQ_4qd_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_4qd(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_4qd_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_4qd_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_4qd_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_4qd_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_4qd_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_4qd_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_4qd_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_4qd_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_4qd_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_4qd_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_4qd_search_type_get, _swigfaiss.IndexVPQ_4qd_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_4qd
+    __del__ = lambda self: None
+IndexVPQ_4qd_swigregister = _swigfaiss.IndexVPQ_4qd_swigregister
+IndexVPQ_4qd_swigregister(IndexVPQ_4qd)
+
+class IndexVPQ_5v6(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_5v6, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_5v6, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_5v6_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_5v6_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_5v6_pq_get, _swigfaiss.IndexVPQ_5v6_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_5v6_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_5v6_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_5v6_codes_get, _swigfaiss.IndexVPQ_5v6_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_5v6(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_5v6_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_5v6_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_5v6_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_5v6_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_5v6_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_5v6_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_5v6_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_5v6_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_5v6_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_5v6_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_5v6_search_type_get, _swigfaiss.IndexVPQ_5v6_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_5v6
+    __del__ = lambda self: None
+IndexVPQ_5v6_swigregister = _swigfaiss.IndexVPQ_5v6_swigregister
+IndexVPQ_5v6_swigregister(IndexVPQ_5v6)
+
+class IndexVPQ_5va(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_5va, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_5va, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_5va_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_5va_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_5va_pq_get, _swigfaiss.IndexVPQ_5va_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_5va_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_5va_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_5va_codes_get, _swigfaiss.IndexVPQ_5va_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_5va(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_5va_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_5va_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_5va_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_5va_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_5va_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_5va_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_5va_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_5va_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_5va_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_5va_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_5va_search_type_get, _swigfaiss.IndexVPQ_5va_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_5va
+    __del__ = lambda self: None
+IndexVPQ_5va_swigregister = _swigfaiss.IndexVPQ_5va_swigregister
+IndexVPQ_5va_swigregister(IndexVPQ_5va)
+
+class IndexVPQ_5vb(Index, AbstractIndexVPQ):
+    __swig_setmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexVPQ_5vb, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Index, AbstractIndexVPQ]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexVPQ_5vb, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["pq"] = _swigfaiss.IndexVPQ_5vb_pq_set
+    __swig_getmethods__["pq"] = _swigfaiss.IndexVPQ_5vb_pq_get
+    if _newclass:
+        pq = _swig_property(_swigfaiss.IndexVPQ_5vb_pq_get, _swigfaiss.IndexVPQ_5vb_pq_set)
+    __swig_setmethods__["codes"] = _swigfaiss.IndexVPQ_5vb_codes_set
+    __swig_getmethods__["codes"] = _swigfaiss.IndexVPQ_5vb_codes_get
+    if _newclass:
+        codes = _swig_property(_swigfaiss.IndexVPQ_5vb_codes_get, _swigfaiss.IndexVPQ_5vb_codes_set)
+
+    def __init__(self, *args):
+        this = _swigfaiss.new_IndexVPQ_5vb(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def train(self, n, x):
+        return _swigfaiss.IndexVPQ_5vb_train(self, n, x)
+
+    def add(self, n, x):
+        return _swigfaiss.IndexVPQ_5vb_add(self, n, x)
+
+    def search(self, n, x, k, distances, labels):
+        return _swigfaiss.IndexVPQ_5vb_search(self, n, x, k, distances, labels)
+
+    def reset(self):
+        return _swigfaiss.IndexVPQ_5vb_reset(self)
+
+    def reconstruct_n(self, i0, ni, recons):
+        return _swigfaiss.IndexVPQ_5vb_reconstruct_n(self, i0, ni, recons)
+
+    def reconstruct(self, key, recons):
+        return _swigfaiss.IndexVPQ_5vb_reconstruct(self, key, recons)
+    ST_PQ = _swigfaiss.IndexVPQ_5vb_ST_PQ
+    ST_SDC = _swigfaiss.IndexVPQ_5vb_ST_SDC
+    __swig_setmethods__["search_type"] = _swigfaiss.IndexVPQ_5vb_search_type_set
+    __swig_getmethods__["search_type"] = _swigfaiss.IndexVPQ_5vb_search_type_get
+    if _newclass:
+        search_type = _swig_property(_swigfaiss.IndexVPQ_5vb_search_type_get, _swigfaiss.IndexVPQ_5vb_search_type_set)
+    __swig_destroy__ = _swigfaiss.delete_IndexVPQ_5vb
+    __del__ = lambda self: None
+IndexVPQ_5vb_swigregister = _swigfaiss.IndexVPQ_5vb_swigregister
+IndexVPQ_5vb_swigregister(IndexVPQ_5vb)
+
 
 def downcast_index(arg1):
     return _swigfaiss.downcast_index(arg1)
@@ -4926,6 +8639,12 @@ class ParameterSpace(_object):
 
     def explore(self, index, nq, xq, crit, ops):
         return _swigfaiss.ParameterSpace_explore(self, index, nq, xq, crit, ops)
+
+    def explore_limit_time(self, index, nq, xq, crit, timelimit_ms, ops):
+        return _swigfaiss.ParameterSpace_explore_limit_time(self, index, nq, xq, crit, timelimit_ms, ops)
+
+    def restrict_range(self, name, val):
+        return _swigfaiss.ParameterSpace_restrict_range(self, name, val)
     __swig_destroy__ = _swigfaiss.delete_ParameterSpace
     __del__ = lambda self: None
 ParameterSpace_swigregister = _swigfaiss.ParameterSpace_swigregister

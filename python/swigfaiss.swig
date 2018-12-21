@@ -1,9 +1,14 @@
 /**
+ * Copyright (c) 2018-present, Thomson Licensing, SAS.
  * Copyright (c) 2015-present, Facebook, Inc.
  * All rights reserved.
  *
- * This source code is licensed under the BSD+Patents license found in the
- * LICENSE file in the root directory of this source tree.
+ * Modifications related the introduction of Quicker ADC (Vectorized Product Quantization)
+ * are licensed under the Clear BSD license found in the LICENSE file in the root directory
+ * of this source tree.
+ *
+ * The rest of the source code is licensed under the BSD+Patents license found in the
+ * LICENSE file in the root directory of this source tree 
  */
 
 // -*- C++ -*-
@@ -30,10 +35,13 @@
 typedef unsigned long uint64_t;
 typedef uint64_t size_t;
 typedef int int32_t;
-typedef unsigned char uint8_t;
+//typedef unsigned char uint8_t;
 
+#define __restrict__
 #define __restrict
-
+#define MKLINC
+// Needed for MKL (if ilp64)
+//#define FINTEGER long
 
 /*******************************************************************
  * Copied verbatim to wrapper. Contains the C++-visible includes, and
@@ -77,9 +85,12 @@ extern "C" {
 #include "VectorTransform.h"
 #include "IndexLSH.h"
 #include "IndexPQ.h"
+#include "IndexVPQ.h"
 #include "IndexIVF.h"
 #include "IndexIVFPQ.h"
+#include "VPQ_Impl.h"
 #include "IndexIVFFlat.h"
+
 #include "IndexScalarQuantizer.h"
 #include "IndexHNSW.h"
 #include "MetaIndexes.h"
@@ -145,7 +156,6 @@ namespace std {
 %template(FloatVectorVector) std::vector<std::vector<float> >;
 %template(ByteVectorVector) std::vector<std::vector<unsigned char> >;
 %template(LongVectorVector) std::vector<std::vector<long> >;
-
 
 
 #ifdef GPU_WRAPPER
@@ -254,18 +264,27 @@ int get_num_gpus()
 %ignore faiss::ProductQuantizer::get_centroids(size_t,size_t) const;
 
 %include "ProductQuantizer.h"
+%include "VecProductQuantizer.h"
 
 %include "VectorTransform.h"
 %include "IndexFlat.h"
 %include "IndexLSH.h"
 %include "PolysemousTraining.h"
 %include "IndexPQ.h"
+%include "IndexVPQ.h"
+#include "VPQ_Impl.h"
 %include "InvertedLists.h"
 %include "IndexIVF.h"
 %include "IndexScalarQuantizer.h"
 %include "IndexHNSW.h"
 %include "IndexIVFFlat.h"
 %include "OnDiskInvertedLists.h"
+
+
+
+
+
+
 
 %ignore faiss::IndexIVFPQ::alloc_type;
 %include "IndexIVFPQ.h"
@@ -375,6 +394,7 @@ struct AsyncIndexSearchC {
 // re-decrlare only what we need
 namespace faiss {
 
+
 struct AsyncIndexSearchC {
     typedef Index::idx_t idx_t;
     bool is_finished;
@@ -407,6 +427,12 @@ struct AsyncIndexSearchC {
     } else
 %enddef
 
+%define DOWNCAST_B(subclass,mangled)
+    if (dynamic_cast<subclass *> ($1)) {
+      SWIG_NewPointerObj(L,$1,SWIGTYPE_p_faiss__ ## mangled,$owner);
+    } else
+%enddef
+
 %define DOWNCAST_GPU(subclass)
     if (dynamic_cast<faiss::gpu::subclass *> ($1)) {
       SWIG_NewPointerObj(L,$1,SWIGTYPE_p_faiss__gpu__ ## subclass,$owner);
@@ -424,6 +450,12 @@ struct AsyncIndexSearchC {
     } else
 %enddef
 
+%define DOWNCAST_B(subclass,mangled)
+    if (dynamic_cast<subclass *> ($1)) {
+      $result = SWIG_NewPointerObj($1,SWIGTYPE_p_faiss__ ## mangled,$owner);
+    } else
+%enddef
+
 %define DOWNCAST_GPU(subclass)
     if (dynamic_cast<faiss::gpu::subclass *> ($1)) {
       $result = SWIG_NewPointerObj($1,SWIGTYPE_p_faiss__gpu__ ## subclass,$owner);
@@ -431,6 +463,8 @@ struct AsyncIndexSearchC {
 %enddef
 
 #endif
+
+%include <VPQ_Impl.h>
 
 %newobject read_index;
 %newobject read_binary_index;
@@ -753,6 +787,7 @@ int * cast_integer_to_int_ptr (long x) {
 %ignore faiss::RangeSearchPartialResult::QueryResult;
 %ignore faiss::IDSelectorBatch::set;
 %ignore faiss::IDSelectorBatch::bloom;
+%ignore faiss::QuantizerMAX;
 
 %include "AuxIndexStructures.h"
 

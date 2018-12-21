@@ -195,6 +195,25 @@ struct ParameterSpace {
                   const AutoTuneCriterion & crit,
                   OperatingPoints * ops)  const;
 
+    /** explore operating points
+	 * @param index   index to run on
+	 * @param xq      query vectors (size nq * index.d)
+	 * @param crit    selection criterion
+	 * @param timelimit_ms time limit for exploration (per query)
+	 * @param ops     resutling operating points
+	 */
+    void explore_limit_time (Index *index,
+                                  size_t nq, const float *xq,
+                                  const AutoTuneCriterion & crit,
+								  double timelimit_ms,
+                                  OperatingPoints * ops) const;
+
+    /**
+     * Allow to restrict the range for an autotune (e.g., fix a parameter)
+     */
+    void restrict_range(const std::string & name, double val);
+
+
     virtual ~ParameterSpace () {}
 };
 

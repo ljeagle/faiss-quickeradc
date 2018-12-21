@@ -64,6 +64,8 @@ if test "x$ax_lapack_ok" == "xno"; then
   AC_MSG_ERROR([An implementation of LAPACK is required but none was found.])
 fi
 
+AX_EXT
+
 
 AC_CONFIG_FILES([makefile.inc])
 AC_OUTPUT

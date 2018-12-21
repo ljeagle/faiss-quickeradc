@@ -1,9 +1,14 @@
 /**
+ * Copyright (c) 2018-present, Thomson Licensing, SAS.
  * Copyright (c) 2015-present, Facebook, Inc.
  * All rights reserved.
  *
- * This source code is licensed under the BSD+Patents license found in the
- * LICENSE file in the root directory of this source tree.
+ * Modifications related the introduction of Quicker ADC (Vectorized Product Quantization)
+ * are licensed under the Clear BSD license found in the LICENSE file in the root directory
+ * of this source tree.
+ *
+ * The rest of the source code is licensed under the BSD+Patents license found in the
+ * LICENSE file in the root directory of this source tree
  */
 
 // -*- c++ -*-
@@ -31,6 +36,7 @@
 #include "MetaIndexes.h"
 #include "IndexScalarQuantizer.h"
 #include "IndexHNSW.h"
+#include "VPQ_Impl.h"
 #include "OnDiskInvertedLists.h"
 #include "IndexBinaryFlat.h"
 #include "IndexBinaryIVF.h"
@@ -104,6 +110,7 @@ static uint32_t fourcc (const char sx[4]) {
         (vec).resize (size);                    \
         READANDCHECK ((vec).data (), size);     \
     }
+
 
 struct ScopeFileCloser {
     FILE *f;
@@ -215,6 +222,14 @@ static void write_ProductQuantizer (
     WRITE1 (pq->nbits);
     WRITEVECTOR (pq->centroids);
 }
+
+
+template<class T_VPQ>
+static void write_VecProductQuantizer (const T_VPQ *pq, IOWriter *f) {
+    WRITE1 (pq->d);
+    WRITEVECTOR (pq->centroids);
+}
+
 
 static void write_ScalarQuantizer (
         const ScalarQuantizer *ivsc, IOWriter *f) {
@@ -333,6 +348,62 @@ static void write_ivf_header (const IndexIVF *ivf, IOWriter *f) {
     WRITEVECTOR (ivf->direct_map);
 }
 
+
+static void write_legacy_ivf_header (const IndexIVF *ivf, IOWriter *f) {
+    write_index_header (ivf, f);
+    WRITE1 (ivf->nlist);
+    WRITE1 (ivf->nprobe);
+    write_index (ivf->quantizer, f);
+    if(const auto & ails =
+              dynamic_cast<const ArrayInvertedLists *>(ivf->invlists)){
+    	for (size_t i = 0; i < ails->nlist; i++)
+    	        WRITEVECTOR (ails->ids[i]);
+    }else{
+    	FAISS_THROW_MSG("Unable to write a legacy IVF header for current structure");
+    }
+
+    WRITE1 (ivf->maintain_direct_map);
+    WRITEVECTOR (ivf->direct_map);
+}
+
+
+
+template<class T_IVPQ>
+bool write_indexIvfVec(const AbstractIndexIVFVPQ* idx, IOWriter *f){
+	if(const T_IVPQ* ivpq = dynamic_cast<const T_IVPQ*>(idx)){
+		std::string a = fourcc_vpq(ivpq);
+		uint32_t h = fourcc(a.c_str());
+		WRITE1 (h);
+		write_legacy_ivf_header (ivpq, f);
+		WRITE1 (ivpq->by_residual);
+		WRITE1 (ivpq->code_size);
+		write_VecProductQuantizer<typename T_IVPQ::VPQ_t>(&ivpq->pq, f);
+		for(int i = 0; i < ivpq->group_codes.size(); i++)
+			WRITEVECTOR (ivpq->group_codes[i]);
+		WRITEVECTOR (ivpq->count_codes);
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
+template<class T_IVPQ>
+bool write_indexVec(const AbstractIndexVPQ* idx, IOWriter *f){
+	if(const T_IVPQ* ivpq = dynamic_cast<const T_IVPQ*>(idx)){
+		std::string a = fourcc_vpq(ivpq);
+		uint32_t h = fourcc(a.c_str());
+		WRITE1 (h);
+		write_index_header (ivpq, f);
+		write_VecProductQuantizer<typename T_IVPQ::VPQ_t>(&ivpq->pq, f);
+		WRITEVECTOR (ivpq->codes);
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
 void write_index (const Index *idx, IOWriter *f) {
     if (const IndexFlat * idxf = dynamic_cast<const IndexFlat *> (idx)) {
         uint32_t h = fourcc (
@@ -428,7 +499,16 @@ void write_index (const Index *idx, IOWriter *f) {
             WRITEVECTOR (ivfpqr->refine_codes);
             WRITE1 (ivfpqr->k_factor);
         }
-
+    } else if(const AbstractIndexIVFVPQ * ivpq =
+            dynamic_cast<const AbstractIndexIVFVPQ *> (idx)) {
+#define WRITE_IVFVPQ(t) write_indexIvfVec<IndexIVFVPQ<t>>(ivpq,f)
+    		bool success= EXPAND_VPQTEST(WRITE_IVFVPQ);
+    		FAISS_THROW_IF_NOT_MSG(success,"Unsupported Serialization for Vectorized PQ Index type");
+    } else if(const AbstractIndexVPQ * ivpq =
+                dynamic_cast<const AbstractIndexVPQ *> (idx)) {
+#define WRITE_IVPQ(t) write_indexVec<IndexVPQ<t>>(ivpq,f)
+        		bool success= EXPAND_VPQTEST(WRITE_IVPQ);
+        		FAISS_THROW_IF_NOT_MSG(success,"Unsupported Serialization for Vectorized PQ Index type");
     } else if(const IndexPreTransform * ixpt =
               dynamic_cast<const IndexPreTransform *> (idx)) {
         uint32_t h = fourcc ("IxPT");
@@ -706,6 +786,14 @@ static void read_ProductQuantizer (ProductQuantizer *pq, IOReader *f) {
     READVECTOR (pq->centroids);
 }
 
+template<class T_VPQ>
+static void read_VecProductQuantizer (T_VPQ *pq, IOReader *f) {
+    READ1 (pq->d);
+    pq->set_derived_values ();
+    READVECTOR (pq->centroids);
+}
+
+
 static void read_ScalarQuantizer (ScalarQuantizer *ivsc, IOReader *f) {
     READ1 (ivsc->qtype);
     READ1 (ivsc->rangestat);
@@ -806,6 +894,49 @@ static IndexIVFPQ *read_ivfpq (IOReader *f, uint32_t h, int io_flags)
         READ1 (ivfpqr->k_factor);
     }
     return ivpq;
+}
+
+template<class T_IVPQ>
+bool read_indexIvfVec(Index ** idx,IOReader *f, uint32_t h){
+	std::string a = fourcc_vpq((T_IVPQ*)NULL);
+	if(h == fourcc(a.c_str())){
+		std::vector<std::vector<Index::idx_t> > ids;
+		T_IVPQ * ivpq = new T_IVPQ ();
+		read_ivf_header (ivpq, f, &ids);
+		READ1 (ivpq->by_residual);
+		READ1 (ivpq->code_size);
+		read_VecProductQuantizer<typename T_IVPQ::VPQ_t>(&ivpq->pq, f);
+		set_array_invlist (ivpq, ids);
+		ivpq->group_codes.resize (ivpq->nlist);
+		for (size_t i = 0; i < ivpq->nlist; i++)
+				READVECTOR (ivpq->group_codes[i]);
+		READVECTOR (ivpq->count_codes);
+
+		// precomputed table not stored. It is cheaper to recompute it
+		ivpq->use_precomputed_table = 0;
+		if (ivpq->by_residual)
+			ivpq->precompute_table ();
+		*idx = ivpq;
+		return true;
+	}else{
+		return false;
+	}
+}
+
+template<class T_IVPQ>
+bool read_indexVec(Index ** idx, IOReader *f, uint32_t h ){
+	std::string a = fourcc_vpq((T_IVPQ*)NULL);
+	if(h == fourcc(a.c_str())){
+
+		    T_IVPQ * ivpq = new T_IVPQ ();
+		    read_index_header (ivpq, f);
+		    read_VecProductQuantizer<typename T_IVPQ::VPQ_t>(&ivpq->pq, f);
+		    READVECTOR (ivpq->codes);
+		    *idx = ivpq;
+		return true;
+	}else{
+		return false;
+	}
 }
 
 int read_old_fmt_hack = 0;
@@ -942,7 +1073,17 @@ Index *read_index (IOReader *f, int io_flags) {
 
         idx = read_ivfpq (f, h, io_flags);
 
-    } else if(h == fourcc ("IxPT")) {
+    }else if(
+#define READ_IVFVPQ(t) read_indexIvfVec<IndexIVFVPQ<t>>(&idx, f, h)
+    		 EXPAND_VPQTEST(READ_IVFVPQ)
+   ){
+   	// Reading done during testing
+   }else if(
+#define READ_IVPQ(t) read_indexVec<IndexVPQ<t>>(&idx, f, h)
+    		 EXPAND_VPQTEST(READ_IVPQ)
+   ){
+   	// Reading done during testing
+   } else if(h == fourcc ("IxPT")) {
         IndexPreTransform * ixpt = new IndexPreTransform();
         ixpt->own_fields = true;
         read_index_header (ixpt, f);

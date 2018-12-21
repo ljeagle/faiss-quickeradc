@@ -117,6 +117,23 @@ void heap_pop (size_t k, typename C::T * bh_val, typename C::TI * bh_ids)
     bh_ids[i] = bh_ids[k];
 }
 
+template <class C> inline
+typename C::T heap_best_value(size_t k, typename C::T * bh_val){
+	// Max heap: best value is the minimum
+	typename C::T val = bh_val[0];
+	for(size_t i=1;i<k;i++){
+		if(!C::cmp(val, bh_val[i])){
+			val=bh_val[i];
+		}
+	}
+	return val;
+}
+
+template <class C> inline
+typename C::T heap_worst_value(size_t k, typename C::T * bh_val){
+	// Max Heap : worst value is the maximum
+	return bh_val[0];
+}
 
 
 /** Pushes the element (val, ids) into the heap bh_val[0..k-2] and
@@ -142,6 +159,19 @@ void heap_push (size_t k,
     bh_ids[i] = ids;
 }
 
+
+template <class C> inline
+void heap_pushpop(size_t k,
+        typename C::T * bh_val, typename C::TI * bh_ids,
+        typename C::T val, typename C::TI ids){
+	if (C::cmp(bh_val[0],val)) {
+		/*if(val > 1e20){
+			printf("Pushing HUGE distance to array %f %ld\n",val,ids);
+		}*/
+		heap_pop<C> (k, bh_val, bh_ids);
+		heap_push<C> (k, bh_val, bh_ids, val, ids);
+	}
+}
 
 
 /* Partial instanciation for heaps with TI = long */
@@ -171,6 +201,17 @@ template <typename T> inline
 void maxheap_push (size_t k, T * bh_val, long * bh_ids, T val, long ids)
 {
     heap_push<CMax<T, long> > (k, bh_val, bh_ids, val, ids);
+}
+
+
+template <typename T> inline
+T maxheap_best_value(size_t k, T * bh_val){
+	return heap_best_value<CMax<T,long>>(k, bh_val);
+}
+
+template <typename T> inline
+T maxheap_worst_value(size_t k, T * bh_val){
+	return heap_worst_value<CMax<T,long>>(k, bh_val);
 }
 
 

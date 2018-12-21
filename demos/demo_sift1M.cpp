@@ -88,7 +88,7 @@ int main()
     double t0 = elapsed();
 
     // this is typically the fastest one.
-    const char *index_key = "IVF4096,Flat";
+    //const char *index_key = "IVF4096,Flat";
 
     // these ones have better memory usage
     // const char *index_key = "Flat";
@@ -99,6 +99,42 @@ int main()
     // const char *index_key = "IMI2x8,PQ32";
     // const char *index_key = "IMI2x8,PQ8+16";
     // const char *index_key = "OPQ16_64,IMI2x8,PQ8+16";
+
+//	const char* index_key = "VPQ_12x6.6.4_NV";
+//	const char* index_key = "VPQ_12x5.5.5_NV";
+//	const char* index_key = "VPQ_12x6.5.5_NV";
+//	const char* index_key = "VPQ_16x4.4_NV";
+	//const char* index_key = "VPQ_16x4.4_NVT";
+//
+    //const char *index_key = "IVF4096,PQ8";
+	const char* index_key = "IVF4096,VPQ_16x4.4_AVX2";
+   // const char* index_key = "IVF4096,VPQ_16x4.4_NVT";
+
+	//
+    //const char* index_key = "VPQ_16x4.4_AVX2";
+
+   // const char* index_key = "PQ8";
+
+	//const char* index_key = "VPQ_12x6.6.4_NVT";
+    //const char* index_key = "IVF4096,VPQ_12x6.6.4_NVT";
+//	const char* index_key = "VPQ_12x5.5.5_NQ";
+//	const char* index_key = "VPQ_12x6.5.5_NQ";
+//	const char* index_key = "VPQ_16x4.4_NQ";
+//	const char* index_key = "VPQ_16x4.4_NQ_AVX2";
+//
+//	const char* index_key = "VPQ_12x6.6.4_NVT";
+//	const char* index_key = "VPQ_12x5.5.5_NVT";
+//	const char* index_key = "VPQ_12x6.5.5_NVT";
+//	const char* index_key = "VPQ_16x4.4_NVT";
+//	const char* index_key = "VPQ_16x4.4_NVT_AVX2";
+//
+//	const char* index_key = "VPQ_8x8_NQ";
+//	const char* index_key = "VPQ_4x8_NQ";
+//	const char* index_key = "VPQ_16x8_NQ";
+//	const char* index_key = "VPQ_8x8_NV";
+//	const char* index_key = "VPQ_4x8_NV";
+//	const char* index_key = "VPQ_16x8_NV";
+
 
     faiss::Index * index;
 

@@ -1,9 +1,14 @@
 /**
+ * Copyright (c) 2018-present, Thomson Licensing, SAS.
  * Copyright (c) 2015-present, Facebook, Inc.
  * All rights reserved.
  *
- * This source code is licensed under the BSD+Patents license found in the
- * LICENSE file in the root directory of this source tree.
+ * Modifications related the introduction of Quicker ADC (Vectorized Product Quantization)
+ * are licensed under the Clear BSD license found in the LICENSE file in the root directory
+ * of this source tree.
+ *
+ * The rest of the source code is licensed under the BSD+Patents license found in the
+ * LICENSE file in the root directory of this source tree
  */
 
 // -*- c++ -*-
@@ -23,6 +28,7 @@
 #include "IndexPQ.h"
 #include "IndexIVF.h"
 #include "IndexIVFPQ.h"
+#include "VPQ_Impl.h"
 #include "IndexIVFFlat.h"
 #include "MetaIndexes.h"
 #include "IndexScalarQuantizer.h"
@@ -252,7 +258,7 @@ void OperatingPoints::display (bool only_optimal) const
  ***************************************************************/
 
 ParameterSpace::ParameterSpace ():
-    verbose (1), n_experiments (500),
+    verbose (1), n_experiments (10000),
     batchsize (1<<30), thread_over_batches (false)
 {
 }
@@ -318,10 +324,26 @@ static void init_pq_ParameterRange (const ProductQuantizer & pq,
     if (pq.code_size % 4 == 0) {
         // Polysemous not supported for code sizes that are not a
         // multiple of 4
-        for (int i = 2; i <= pq.code_size * 8 / 2; i+= 2)
+        for (int i = 2; i <= pq.code_size * 8 / 2 ; i+= 2)
             pr.values.push_back(i);
     }
     pr.values.push_back (pq.code_size * 8);
+}
+
+static void init_ivpq_ParameterRange (const AbstractIndexVPQ * ivpq,
+                                    ParameterRange & pr)
+{
+	for (int i = 1; i <= 8; i+= 1){
+            pr.values.push_back(i);
+    }
+}
+
+static void init_ivfvpq_ParameterRange (const AbstractIndexIVFVPQ * ivpq,
+                                    ParameterRange & pr)
+{
+	for (int i = 1; i <= 8; i+= 1){
+            pr.values.push_back(i);
+    }
 }
 
 ParameterRange &ParameterSpace::add_range(const char * name)
@@ -355,9 +377,52 @@ void ParameterSpace::initialize (const Index * index)
     }
 
     if (DC (IndexIVF)) {
-        {
+        const MultiIndexQuantizer *miq =
+            dynamic_cast<const MultiIndexQuantizer *> (ix->quantizer);
+        if (miq) {
+
+            ParameterRange & pr_max_codes = add_range("max_codes");
+            for (int i = 8; i < 17; i++) {
+                pr_max_codes.values.push_back (1 << i);
+            }
+            pr_max_codes.values.push_back (1.0 / 0.0);
+
+            // nprobe for IMI
             ParameterRange & pr = add_range("nprobe");
-            for (int i = 0; i < 13; i++) {
+            for (int i = 1; i < 4; i++) {
+            	size_t nprobe = i;
+            	if (nprobe >= ix->nlist) break;
+            	pr.values.push_back (nprobe);
+            }
+            for (int i = 4; i < 16; i+=2) {
+            	size_t nprobe = i;
+            	if (nprobe >= ix->nlist) break;
+            	pr.values.push_back (nprobe);
+            }
+            for (int i = 16; i < 32; i+=4) {
+				size_t nprobe = i;
+				if (nprobe >= ix->nlist) break;
+				pr.values.push_back (nprobe);
+            }
+            for (int i = 5; i < 10; i++) {
+            	size_t nprobe = 1 << i;
+            	if (nprobe >= ix->nlist) break;
+            	pr.values.push_back (nprobe);
+            }
+        }else {
+        	// nprobe otherwise
+            ParameterRange & pr = add_range("nprobe");
+            for (int i = 1; i < 8; i++) {
+                  size_t nprobe = i;
+                  if (nprobe >= ix->nlist) break;
+                  pr.values.push_back (nprobe);
+            }
+            for (int i = 8; i < 16; i+=2) {
+            	size_t nprobe = i;
+            	if (nprobe >= ix->nlist) break;
+            	pr.values.push_back (nprobe);
+            }
+            for (int i = 4; i < 6; i++) {
                 size_t nprobe = 1 << i;
                 if (nprobe >= ix->nlist) break;
                 pr.values.push_back (nprobe);
@@ -365,7 +430,13 @@ void ParameterSpace::initialize (const Index * index)
         }
         if (dynamic_cast<const IndexHNSW*>(ix->quantizer)) {
             ParameterRange & pr = add_range("efSearch");
-            for (int i = 2; i <= 9; i++) {
+            for (int i = 2; i < 8; i+=2) {
+            	pr.values.push_back (i);
+            }
+            for (int i = 8; i < 32; i+=4) {
+            	pr.values.push_back (i);
+            }
+            for (int i = 5; i <= 9; i++) {
                 pr.values.push_back (1 << i);
             }
         }
@@ -374,21 +445,25 @@ void ParameterSpace::initialize (const Index * index)
         ParameterRange & pr = add_range("ht");
         init_pq_ParameterRange (ix->pq, pr);
     }
+
     if (DC (IndexIVFPQ)) {
         ParameterRange & pr = add_range("ht");
         init_pq_ParameterRange (ix->pq, pr);
     }
 
+    if (DC (AbstractIndexIVFVPQ)) {
+        ParameterRange & pr = add_range("is");
+        init_ivfvpq_ParameterRange (ix, pr);
+    }
+
+    if (DC (AbstractIndexVPQ)) {
+        ParameterRange & pr = add_range("is");
+        init_ivpq_ParameterRange (ix, pr);
+    }
+
+
     if (DC (IndexIVF)) {
-        const MultiIndexQuantizer *miq =
-            dynamic_cast<const MultiIndexQuantizer *> (ix->quantizer);
-        if (miq) {
-            ParameterRange & pr_max_codes = add_range("max_codes");
-            for (int i = 8; i < 20; i++) {
-                pr_max_codes.values.push_back (1 << i);
-            }
-            pr_max_codes.values.push_back (1.0 / 0.0);
-        }
+
     }
     if (DC (IndexIVFPQR)) {
         ParameterRange & pr = add_range("k_factor");
@@ -409,6 +484,16 @@ void ParameterSpace::initialize (const Index * index)
 // non-const version
 #define DC(classname) classname *ix = dynamic_cast<classname *>(index)
 
+void ParameterSpace::restrict_range(const std::string & name, double val){
+	for (int i = 0; i < parameter_ranges.size(); i++) {
+	    ParameterRange & pr = parameter_ranges[i];
+		if(pr.name == name){
+			pr.values.clear();
+			pr.values.push_back(val);
+			return;
+		}
+	}
+}
 
 /// set a combination of parameters on an index
 void ParameterSpace::set_index_parameters (Index *index, size_t cno) const
@@ -505,6 +590,18 @@ void ParameterSpace::set_index_parameter (
             return;
         }
     }
+
+    if (name == "is") {
+        if (DC (AbstractIndexVPQ)) {
+           ix->initial_scan_estim_param = val;
+           return;
+        } else if (DC (AbstractIndexIVFVPQ)) {
+            ix->initial_scan_estim_param = val;
+            return;
+        }
+    }
+
+   //FIXME Add autotuning of parameters for IVFVPQ
 
     if (name == "k_factor") {
         if (DC (IndexIVFPQR)) {
@@ -677,6 +774,134 @@ void ParameterSpace::explore (Index *index,
     }
 }
 
+
+
+
+
+void ParameterSpace::explore_limit_time (Index *index,
+                              size_t nq, const float *xq,
+                              const AutoTuneCriterion & crit,
+							  double timelimit_ms,
+                              OperatingPoints * ops) const
+{
+    FAISS_THROW_IF_NOT_MSG (nq == crit.nq,
+                      "criterion does not have the same nb of queries");
+
+    /* XXX: This function has been updated to report search time normalized per query in ms , rather than full test set in seconds */
+
+    size_t n_comb = n_combinations ();
+
+    int n_exp = n_experiments;
+
+    if (n_exp > n_comb) n_exp = n_comb;
+    FAISS_THROW_IF_NOT (n_comb == 1 || n_exp > 2);
+    std::vector<int> perm (n_comb);
+    // make sure the slowest and fastest experiment are run
+    perm[0] = 0;
+    if (n_comb > 1) {
+        perm[1] = n_comb - 1;
+        rand_perm (&perm[2], n_comb - 2, 1234);
+        for (int i = 2; i < perm.size(); i++) perm[i] ++;
+    }
+
+    for (size_t xp = 0; xp < n_exp; xp++) {
+        size_t cno = perm[xp];
+
+        if (verbose)
+            printf("  %ld/%d: cno=%ld %s ", xp, n_exp, cno,
+                   combination_name (cno).c_str());
+
+        {
+            double lower_bound_t = 0.0;
+            double upper_bound_perf = 1.0;
+            for (int i = 0; i < ops->all_pts.size(); i++) {
+                update_bounds (cno, ops->all_pts[i],
+                               &upper_bound_perf, &lower_bound_t);
+            }
+            double best_t = ops->t_for_perf (upper_bound_perf);
+            if (best_t <= lower_bound_t){
+            	if(verbose) printf ("bounds [perf<=%.3f t>=%.3f] skip\n", upper_bound_perf, lower_bound_t);
+            	continue;
+            }
+            if (timelimit_ms <= lower_bound_t){
+            	if(verbose) printf ("bounds [perf<=%.3f t>=%.3f] prune\n", upper_bound_perf, lower_bound_t);
+            	continue;
+            }
+            printf ("bounds [perf<=%.3f t>=%.3f]", upper_bound_perf, lower_bound_t);
+        }
+
+        set_index_parameters (index, cno);
+        std::vector<Index::idx_t> I(nq * crit.nnn);
+        std::vector<float> D(nq * crit.nnn);
+
+        // Test if worthwhile executing...
+        double t0t = getmillisecs ();
+
+        int nqt=nq/100;
+        for (size_t q0 = 0; q0 < nqt; q0 += batchsize) {
+        	size_t q1 = q0 + batchsize;
+        	if (q1 > nqt) q1 = nqt;
+        	index->search (q1 - q0, xq + q0 * index->d,
+        			crit.nnn,
+					D.data() + q0 * crit.nnn,
+					I.data() + q0 * crit.nnn);
+        }
+
+        double t_search_t = (getmillisecs() - t0t)/nqt;
+
+
+        if(t_search_t > timelimit_ms*1.5){
+
+        	if (verbose) printf(" perf %.3f t %.3f (PRUNED) \n", 1.0, t_search_t);
+
+        	/* Skip the real benchmark  (benchmark if between timelimit_ms and 1.5 timelimit_ms to allow later pruning) */
+        	continue;
+
+        }
+
+
+        // Real "benchmarking" execution.
+
+        double t0 = getmillisecs ();
+
+        if (thread_over_batches) {
+#pragma omp parallel for
+            for (size_t q0 = 0; q0 < nq; q0 += batchsize) {
+                size_t q1 = q0 + batchsize;
+                if (q1 > nq) q1 = nq;
+                index->search (q1 - q0, xq + q0 * index->d,
+                               crit.nnn,
+                               D.data() + q0 * crit.nnn,
+                               I.data() + q0 * crit.nnn);
+            }
+        } else {
+            for (size_t q0 = 0; q0 < nq; q0 += batchsize) {
+                size_t q1 = q0 + batchsize;
+                if (q1 > nq) q1 = nq;
+                index->search (q1 - q0, xq + q0 * index->d,
+                               crit.nnn,
+                               D.data() + q0 * crit.nnn,
+                               I.data() + q0 * crit.nnn);
+            }
+        }
+
+        double t_search = (getmillisecs() - t0) / nq;
+
+        double perf = crit.evaluate (D.data(), I.data());
+
+        bool keep = ops->add (perf, t_search, combination_name (cno), cno);
+
+        if (verbose)
+            printf(" perf %.3f t %.3f %s\n", perf, t_search,
+                   keep ? "*" : "");
+    }
+}
+
+
+
+
+
+
 /***************************************************************
  * index_factory
  ***************************************************************/
@@ -702,6 +927,46 @@ char get_trains_alone(const Index *coarse_quantizer) {
 }
 
 
+}
+
+template <class T>
+bool ivpq(std::string actual, std::string expected, Index* coarse_quantizer, int ncentroids, ScopeDeleter1<Index>& del_coarse_quantizer,int d,  MetricType metric, Index ** result_index) {
+	if(actual == expected){
+    	FAISS_THROW_IF_NOT_MSG(metric == METRIC_L2,
+    	   "IVFVPQ not implemented for inner product search");
+
+    	if (coarse_quantizer) {
+    		IndexIVF *index_ivf = new IndexIVFVPQ<T> (coarse_quantizer, d, ncentroids);
+    		index_ivf->quantizer_trains_alone = get_trains_alone (coarse_quantizer);
+    		index_ivf->metric_type = metric;
+    		index_ivf->cp.spherical = metric == METRIC_INNER_PRODUCT;
+    		del_coarse_quantizer.release ();
+    		index_ivf->own_fields = true;
+    		(*result_index) = index_ivf;
+    		return true;
+    	} else {
+    		(*result_index) = new IndexVPQ<T>(d, metric);
+    		return true;
+    	}
+	}else{
+		return false;
+	}
+}
+
+
+template <class T>
+bool ovpq(std::string actual, std::string expected, int* d, VectorTransform ** vt_1) {
+	char substr[256];
+	int d_out;
+	if (sscanf (expected.c_str(), "OVPQ%[^_]_%d",substr, &d_out) == 2 && strcmp(substr,actual.c_str()) == 0) {
+		*vt_1 = new OVPQMatrix<T> (*d, d_out);
+		*d = d_out;
+		return true;
+	} else if (sscanf (expected.c_str(), "OVPQ%s", substr) == 1 && strcmp(substr,actual.c_str()) == 0) {
+		*vt_1 = new OVPQMatrix<T> (*d);
+		return true;
+	}
+	return false;
 }
 
 Index *index_factory (int d, const char *description_in, MetricType metric)
@@ -751,7 +1016,21 @@ Index *index_factory (int d, const char *description_in, MetricType metric)
             d = d_out;
         } else if (sscanf (tok, "OPQ%d", &opq_M) == 1) {
             vt_1 = new OPQMatrix (d, opq_M);
-        } else if (stok == "L2norm") {
+        } else if(
+        		ovpq<VecProductQuantizer_NoVec<24,3,6,6,4,0,uint16_t,__m512i,__m512i>>("24x6.6.4",tok,&d,&vt_1) ||
+        		ovpq<VecProductQuantizer_NoVec<24,3,5,5,5,0,uint16_t,__m512i,__m512i>>("24x5.5.5",tok,&d,&vt_1) ||
+        		ovpq<VecProductQuantizer_NoVec<24,3,6,5,5,0,uint16_t,	__m512i,__m512i>>("24x6.5.5",tok,&d,&vt_1) ||
+        		ovpq<VecProductQuantizer_NoVec<12,3,6,6,4,0,uint16_t,__m512i,__m512i>>("12x6.6.4",tok,&d,&vt_1) ||
+				ovpq<VecProductQuantizer_NoVec<12,3,5,5,5,0,uint16_t,__m512i,__m512i>>("12x5.5.5",tok,&d,&vt_1) ||
+				ovpq<VecProductQuantizer_NoVec<12,3,6,5,5,0,uint16_t,	__m512i,__m512i>>("12x6.5.5",tok,&d,&vt_1) ||
+				ovpq<VecProductQuantizer_NoVec<16,2,4,4,0,0,int8_t,__m128i,__m256i>>("16x4.4",tok,&d,&vt_1) ||
+				ovpq<VecProductQuantizer_NoVec<32,2,4,4,0,0,int8_t,__m128i,__m256i>>("32x4.4",tok,&d,&vt_1)  ||
+				ovpq<VecProductQuantizer_NoVec<30,3,6,5,5,0,uint16_t,	__m512i,__m512i>>("30x6.5.5",tok,&d,&vt_1) ||
+				ovpq<VecProductQuantizer_NoVec<30,3,6,6,4,0,uint16_t,	__m512i,__m512i>>("30x6.6.4",tok,&d,&vt_1) ||
+				ovpq<VecProductQuantizer_NoVec<30,3,5,5,5,0,uint16_t,	__m512i,__m512i>>("30x5.5.5",tok,&d,&vt_1)
+        ){
+        	// Do nothing creation is done in test block
+    	}else if (stok == "L2norm") {
             vt_1 = new NormalizationTransform (d, 2.0);
 
         // coarse quantizers
@@ -845,6 +1124,13 @@ Index *index_factory (int d, const char *description_in, MetricType metric)
                 index_pq->do_polysemous_training = do_polysemous_training;
                 index_1 = index_pq;
             }
+        }else if (
+#define BUILD_VPQ(t) ivpq<t>(factName((t*)NULL),stok,coarse_quantizer,ncentroids,del_coarse_quantizer,d,metric,&index_1)
+    		 EXPAND_VPQTEST(BUILD_VPQ)
+#undef BUILD_VPQ
+           ){
+        	    // Nothing to be done
+            	// Creation is handled in test block.
         } else if (!index &&
                    sscanf (tok, "HNSW%d_%d+PQ%d", &M, &ncent, &pq_m) == 3) {
             Index * quant = new IndexFlatL2 (d);
