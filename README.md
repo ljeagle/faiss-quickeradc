@@ -18,9 +18,9 @@ We also evaluated its performance for index-based (i.e., non-exhaustive) search 
 The algorithms implemented and complete commented results are described in
 > **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD**  
 > Fabien André, Anne-Marie Kermarrec and Nicolas Le Scouarnec  
-> *arXiv*  
+> *arXiv 1812.09162*  
 > December 2018  
-> https://arxiv.org/xxx
+> https://arxiv.org/abs/1812.09162
 
 For more details on FAISS see the main [repository](https://github.com/facebookresearch/faiss) and the faiss's [README.md](README-faiss.md).
 
@@ -32,6 +32,23 @@ of this source tree.
 The rest of the source code is licensed by Facebook under the BSD license found in the
 LICENSE file in the root directory of this source tree
 
+## References
+If you use or compare to this work, please cite
+
+> **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD**  
+> Fabien André, Anne-Marie Kermarrec and Nicolas Le Scouarnec  
+> *arXiv 1812.09162*  
+> December 2018  
+> https://arxiv.org/abs/1812.09162
+ 
+> **Accelerated Nearest Neighbor Search with Quick ADC**  
+> Fabien André, Anne-Marie Kermarrec and Nicolas Le Scouarnec  
+> *ICMR '17 Proceedings of the 2017 ACM on International Conference on Multimedia Retrieval*  
+> June 2017  
+> https://doi.org/10.1145/3078971.3078992
+  
+ 
+  
 ## Building and Testing
 
 ### Compiling the library and a demo program
@@ -105,7 +122,7 @@ bool write_indexVec(const AbstractIndexVPQ* idx, IOWriter *f){
         		FAISS_THROW_IF_NOT_MSG(success,"Unsupported Serialization for Vectorized PQ Index type");
 }
 ``` 
-Alternative usage examples are given in [AutoTune.cpp](./AutoTune.cpp); in that case note that macro EXPAND_VPQTEST is inside the if test and that the action block is empty (action is performed within the if, leveraging lazy evaluation). It also shows the usage of the string-based representation of the Quantizer (e.g., *VPQ_12x6.6.4_AVX512*) declared within [VPQ_Impl.h](./VPQ_Impl.h)
+Alternative usage examples are given in [AutoTune.cpp](./AutoTune.cpp); in that case note that macro EXPAND_VPQTEST is inside the if test and that the action block is empty (action is performed within the if, leveraging lazy evaluation). It also shows the usage of the string-based representation of the Quantizer (e.g., *VPQ_12x6.6.4_AVX512*) declared within [VPQ_Impl.h](./VPQ_Impl.h).
 
 Note that each variant comes in multiple form useful for evaluation and debugging:
  - non-vectorized non-quantized 
@@ -139,17 +156,81 @@ VecProductQuantizer_4_AVX256<16>
 
 Check [VPQ_Impl.h](./VPQ_Impl.h) for a complete list of available quantizers (mx{6,6,4}, mx{6,5,5}, mx{5,5,5}, mx{8,8}, mx{8}), or if you want to add a new quantizer.
 
-## References
-If you use or compare to this work, please cite
 
-> **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD**  
-> Fabien André, Anne-Marie Kermarrec and Nicolas Le Scouarnec  
-> *arXiv*  
-> December 2018  
-> https://arxiv.org/xxx
- 
-> **Accelerated Nearest Neighbor Search with Quick ADC**  
-> Fabien André, Anne-Marie Kermarrec and Nicolas Le Scouarnec  
-> *ICMR '17 Proceedings of the 2017 ACM on International Conference on Multimedia Retrieval*
-> June 2017  
-> https://doi.org/10.1145/3078971.3078992
+## Benchmarks from Technical report
+
+The technical report **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD** relies on code commit *d11c5af*. To reproduce results, you can use the following commands:
+```
+export PYTHON_PATH=.
+## For exhaustive search (results are displayed on stdout) on SIFT1M (dataset must be in sift1M folder)
+pyton benchs/bench_vpq_sift1000m.py 
+
+## For non-exhaustive search (commands outputs result files in /tmp for R@1 and R@100)
+# For SIFT1000M (dataset must be in bigann folder)
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,VPQ_12x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,VPQ_24x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,VPQ_32x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,VPQ_16x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,VPQ_8x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,VPQ_16x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,PQ8 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,PQ16 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,PQ8np autotuneNP
+python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,PQ16np autotuneNP
+
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,VPQ_12x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,VPQ_24x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,VPQ_32x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,VPQ_16x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,VPQ_8x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,VPQ_16x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,PQ8 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,PQ16 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,PQ8np autotuneNP
+python benchs/bench_vpq_1bn.py SIFT1000M IVF262144_HNSW32,PQ16np autotuneNP
+
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,VPQ_12x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,VPQ_24x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,VPQ_32x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,VPQ_16x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,VPQ_8x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,VPQ_16x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,PQ8 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,PQ16 autotune
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,PQ8np autotuneNP
+python benchs/bench_vpq_1bn.py SIFT1000M IVF65536,PQ16np autotuneNP
+
+# For Deep1B (dataset must be in deep1b folder)
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,VPQ_12x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,VPQ_24x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,VPQ_32x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,VPQ_16x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,VPQ_8x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,VPQ_16x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,PQ8 autotune
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,PQ16 autotune
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,PQ8np autotuneNP
+python benchs/bench_vpq_1bn.py Deep1B IMI2x12,PQ16np autotuneNP
+
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,VPQ_12x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,VPQ_24x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,VPQ_32x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,VPQ_16x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,VPQ_8x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,VPQ_16x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,PQ8 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,PQ16 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,PQ8np autotuneNP
+python benchs/bench_vpq_1bn.py Deep1B IVF262144_HNSW32,PQ16np autotuneNP
+
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,VPQ_12x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,VPQ_24x6.6.4_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,VPQ_32x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,VPQ_16x4.4_AVX2 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,VPQ_8x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,VPQ_16x8.8_AVX512 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,PQ8 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,PQ16 autotune
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,PQ8np autotuneNP
+python benchs/bench_vpq_1bn.py Deep1B IVF65536,PQ16np autotuneNP
+```
