@@ -52,6 +52,7 @@ IndexPQ::IndexPQ ()
 
 void IndexPQ::train (idx_t n, const float *x)
 {
+    pq.verbose = verbose;   
     if (!do_polysemous_training) {        // standard training
         pq.train(n, x);
     } else {
@@ -78,8 +79,15 @@ void IndexPQ::add (idx_t n, const float *x)
 {
     FAISS_THROW_IF_NOT (is_trained);
     codes.resize ((n + ntotal) * pq.code_size);
-    pq.compute_codes (x, &codes[ntotal * pq.code_size], n);
-    ntotal += n;
+    idx_t already_added=0;
+    while(n>0){
+        idx_t count = n < 65000L ? n : 65000L;
+        // ntotal is offset where the codes from x are added.
+        pq.compute_codes (x+already_added*d, &codes[ntotal * pq.code_size], count);
+        ntotal += count;
+        n -= count;
+        already_added += count;
+    }
 }
 
 

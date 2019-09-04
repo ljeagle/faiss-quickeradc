@@ -20,7 +20,7 @@ swigfaiss_wrap.cpp: swigfaiss.swig $(HEADERS)
 	$(SWIG) -python -c++ -Doverride= -I../ -o $@ $<
 
 swigfaiss_wrap.o: swigfaiss_wrap.cpp
-	$(CXX) $(CXXFLAGS) $(CPUFLAGS) $(PYTHONCFLAGS) -I../ -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(CPUFLAGS) $(PYTHONCFLAGS) -I. -I../ -c $< -o $@
 
 # Extension is .so even on OSX.
 _swigfaiss.so: swigfaiss_wrap.o ../libfaiss.a

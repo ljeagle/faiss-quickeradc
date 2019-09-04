@@ -74,7 +74,7 @@ struct IndexVPQ: Index, AbstractIndexVPQ {
              {
         is_trained = false;
         search_type = ST_PQ;
-        this->initial_scan_estim_param=4;
+        this->initial_scan_estim_param=pq.get_initial_scan_estim_parameter();
     }
 
     IndexVPQ () {
@@ -91,8 +91,16 @@ struct IndexVPQ: Index, AbstractIndexVPQ {
     void add(idx_t n, const float* x) override {
         FAISS_THROW_IF_NOT (is_trained);
         codes.resize (pq.nb_groups(n + ntotal));
-        pq.encode_multiple(x, codes.data(), ntotal, n);
-        ntotal += n;
+        idx_t already_added=0;
+        while(n>0){
+            idx_t count = n < 10000L*pq.codes_per_group ? n : 10000L*pq.codes_per_group ;
+            // ntotal is offset where the codes from x are added.
+            pq.encode_multiple(x+already_added*d, codes.data(), ntotal, count);
+            ntotal += count;
+            n -= count;
+            already_added += count;
+        }
+        
     }
 
     void search(

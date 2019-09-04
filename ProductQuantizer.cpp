@@ -278,6 +278,8 @@ void ProductQuantizer::train (int n, const float * x)
             if(verbose) {
                 clus.verbose = true;
                 printf ("Training PQ slice %d/%zd\n", m, M);
+            }else{
+                clus.verbose = false;
             }
             IndexFlatL2 index (dsub);
             clus.train (n, xslice, assign_index ? *assign_index : index);

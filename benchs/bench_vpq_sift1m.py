@@ -62,19 +62,19 @@ def evaluate(s, index):
 
 
     # index with 16 subquantizers, 8 bit each
-    index.verbose = True
+    index.verbose = False
     index.search_type = faiss.IndexPQ.ST_PQ
 
-    print(s)
-    print "train"
+    #print(s)
+    #print "train"
 
     index.train(xt)
 
-    print "add vectors to index"
+    #print "add vectors to index"
 
     index.add(xb)
 
-    print "bench"
+    #print "bench"
 
 
     #print "PQ baseline",
@@ -87,9 +87,48 @@ def evaluate(s, index):
     recall_at_1 = (I[:, :1] == gt[:, :1]).sum() / float(nq)
     recall_at_100 = (I[:, :100] == gt[:, :1]).sum() / float(nq)
             
-    print "\t %7.3f ms per query, R@1 %.4f   R@100  %.4f"   % (
+    print "%s\t %7.3f ms per query, R@1 %.4f   R@100  %.4f"   % (s,
         (t1 - t0) * 1000.0 / nq * nt, recall_at_1, recall_at_100)
 
+evaluate("VPQ_2qs", faiss.IndexVPQ_2qs(d))
+evaluate("VPQ_2qu", faiss.IndexVPQ_2qu(d))
+evaluate("VPQ_2s4", faiss.IndexVPQ_2s4(d))
+
+evaluate("VPQ_4qs", faiss.IndexVPQ_4qs(d))
+evaluate("VPQ_4qu", faiss.IndexVPQ_4qu(d))
+evaluate("VPQ_4s4", faiss.IndexVPQ_4s4(d))
+
+evaluate("VPQ_8qs", faiss.IndexVPQ_8qs(d))
+evaluate("VPQ_8qu", faiss.IndexVPQ_8qu(d))
+evaluate("VPQ_8s4", faiss.IndexVPQ_8s4(d))
+
+
+evaluate("VPQ_2Vq", faiss.IndexVPQ_2Vq(d))
+evaluate("VPQ_2vQ", faiss.IndexVPQ_2vQ(d))
+evaluate("VPQ_2VQ", faiss.IndexVPQ_2VQ(d))
+
+evaluate("VPQ_2v4", faiss.IndexVPQ_2v4(d))
+evaluate("VPQ_2V4", faiss.IndexVPQ_2V4(d))
+
+
+evaluate("VPQ_4Vq", faiss.IndexVPQ_4Vq(d))
+evaluate("VPQ_4vQ", faiss.IndexVPQ_4vQ(d))
+evaluate("VPQ_4VQ", faiss.IndexVPQ_4VQ(d))
+
+evaluate("VPQ_4v4", faiss.IndexVPQ_4v4(d))
+evaluate("VPQ_4V4", faiss.IndexVPQ_4V4(d))
+
+
+
+evaluate("VPQ_8Vq", faiss.IndexVPQ_8Vq(d))
+evaluate("VPQ_8vQ", faiss.IndexVPQ_8vQ(d))
+evaluate("VPQ_8VQ", faiss.IndexVPQ_8VQ(d))
+
+evaluate("VPQ_8v4", faiss.IndexVPQ_8v4(d))
+evaluate("VPQ_8V4", faiss.IndexVPQ_8V4(d))
+
+
+exit()
 
 evaluate("VPQ_2v4", faiss.IndexVPQ_2v4(d))
 evaluate("VPQ_2V4", faiss.IndexVPQ_2V4(d))

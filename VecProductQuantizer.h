@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2019-present, Nicolas Le Scouarnec
  * Copyright (c) 2018-present, Thomson Licensing, SAS.
  * Copyright (c) 2015-present, Facebook, Inc.
  * All rights reserved.
@@ -194,6 +195,7 @@ struct QuantizerMAX {
 
     QuantizerMAX(float *min_,float min_sum_, float max_, int M_): min(), min_sum(min_sum_),  max(max_), M(M_)  {
         QMAX = std::numeric_limits<T_TSC>::max();
+		//printf("Building quantizer with T_TSC %d\n",std::numeric_limits<T_TSC>::max());
         //gmin = std::numeric_limits<float>::max();
         min.resize(M);
         for(int m=0;m<M;m++){
@@ -209,19 +211,28 @@ struct QuantizerMAX {
     }
 
     void quantize_val(float val, T_TSC* qval, int m) const {
-        if(val >= max) {
+		int pval = (val - min[m])*inv_delta;
+        if(pval >= QMAX) {
             *qval = QMAX;
             return;
-        }
-        *qval = static_cast<T_TSC>(((val - min[m])*inv_delta));
+        }else{
+        	*qval = static_cast<T_TSC>(pval);
+		}
     }
 
     void quantize_sum(float val, T_TSC* qval)  const {
-    	if(val >= max) {
+		int pval = (val - min_sum)*inv_delta;
+        if(pval >= QMAX) {
+            *qval = QMAX;
+            return;
+        }else{
+        	*qval = static_cast<T_TSC>(pval);
+		}
+    	/*if(val >= max) {
     		*qval = QMAX;
     		return;
     	}
-    	*qval = static_cast<T_TSC>(((val - min_sum)*inv_delta));
+    	*qval = static_cast<T_TSC>(((val - min_sum)*inv_delta));*/
     }
 
     float unquantize_sum(T_TSC qval) const {
@@ -298,6 +309,9 @@ struct QuantizerMAX {
 };
 
 
+
+
+
 template<>
 struct QuantizerMAX<uint8_t> {
     std::vector<float> min;
@@ -310,9 +324,12 @@ struct QuantizerMAX<uint8_t> {
     //float gmin_sum;
     uint8_t QMAX;
 
+	QuantizerMAX() {}
+
+	virtual ~QuantizerMAX() {}
 
     QuantizerMAX(float *min_,float min_sum_, float max_, int M_): min(), min_sum(min_sum_),  max(max_*1.001), M(M_)  {
-        QMAX = std::numeric_limits<uint8_t>::max() - M - 1;
+        QMAX = std::numeric_limits<uint8_t>::max();
         //gmin = std::numeric_limits<float>::max();
         min.resize(M);
         for(int m=0;m<M;m++){
@@ -327,28 +344,28 @@ struct QuantizerMAX<uint8_t> {
         //printf("[%f -- %f] (delta: %g, inv_delta: %g\n)",gmin,max,delta,inv_delta);
     }
 
-    void quantize_val(float val, uint8_t* qval, int m) const {
+    virtual void quantize_val(float val, uint8_t* qval, int m) const {
         if(val >= max) {
-            *qval = QMAX + M + 1;  // Sum will be shifted by M (to the limit of uint8_t)
+            *qval = QMAX; 
             return;
         }
-        *qval = static_cast<uint8_t>(((val - min[m])*inv_delta)) + 1; // Shift by 1 as zero is a sticky in saturated arithmetic
+        *qval = static_cast<uint8_t>(((val - min[m])*inv_delta)); 
     }
 
-    void quantize_sum(float val, uint8_t* qval)  const {
+    virtual void quantize_sum(float val, uint8_t* qval)  const {
     	if(val >= max) {
-    		*qval = QMAX + M + 1;
+    		*qval = QMAX;
     		return;
     	}
-    	*qval = static_cast<uint8_t>(((val - min_sum)*inv_delta)) + M;
+    	*qval = static_cast<uint8_t>(((val - min_sum)*inv_delta));
     }
 
-    float unquantize_sum(uint8_t qval) const {
-    	float fval=qval+0.5-M-1;
+    virtual float unquantize_sum(uint8_t qval) const {
+    	float fval=qval+0.5;
     	return (fval*delta)+min_sum;
     }
 
-    inline void quantize_val_simd(const float* val, uint8_t* qval, const int table_size, const int ksub, const int m) const {
+    virtual inline void quantize_val_simd(const float* val, uint8_t* qval, const int table_size, const int ksub, const int m) const {
     	FAISS_THROW_IF_NOT_MSG(ksub%16 == 0 && table_size%16 == 0 , "Requires table size and ksub to be multiples of of 16");
     	// Set values 0 to ksub to their quantized values and values table_size to ksub-1, if any,  to zero
     	const __m256 min_r = _mm256_set1_ps(min[m]);
@@ -374,13 +391,12 @@ struct QuantizerMAX<uint8_t> {
     		__m128i packed8_interleaved4 = _mm_packus_epi16(p16i_l, p16i_h);  // A B A B
     		// Reorganize...
     		__m128i packed8 = _mm_shuffle_epi8(packed8_interleaved4, shuf_r); // A A A A B B B B
-    		__m128i offset8 = _mm_add_epi8(packed8, _mm_set1_epi8(1));
-    		_mm_store_si128(t,offset8);
+    		_mm_store_si128(t,packed8);
     	}
     	for(int i=ksub/16;i<table_size/16;i++){
     		// Set to zero
     		__m128i * t = (__m128i*)&qval[i*16];
-    		_mm_store_si128(t,  _mm_set1_epi8(1));
+    		_mm_store_si128(t,  _mm_setzero_si128());
     	}
     }
 
@@ -402,7 +418,7 @@ struct QuantizerMAX<uint16_t> {
 
 
     QuantizerMAX(float *min_,float min_sum_, float max_, int M_): min(), min_sum(min_sum_),  max(max_*1.001), M(M_)  {
-        QMAX = std::numeric_limits<uint16_t>::max() - M - 1;
+        QMAX = std::numeric_limits<uint16_t>::max();
         //gmin = std::numeric_limits<float>::max();
         min.resize(M);
         for(int m=0;m<M;m++){
@@ -419,22 +435,22 @@ struct QuantizerMAX<uint16_t> {
 
     void quantize_val(float val, uint16_t* qval, int m) const {
         if(val >= max) {
-            *qval = QMAX + M + 1;  // Sum will be shifted by M (to the limit of uint8_t)
+            *qval = QMAX; 
             return;
         }
-        *qval = static_cast<uint16_t>(((val - min[m])*inv_delta)) + 1; // Shift by 1 as zero is a sticky in saturated arithmetic
+        *qval = static_cast<uint16_t>(((val - min[m])*inv_delta)); 
     }
 
     void quantize_sum(float val, uint16_t* qval)  const {
     	if(val >= max) {
-    		*qval = QMAX + M + 1;
+    		*qval = QMAX;
     		return;
     	}
-    	*qval = static_cast<uint16_t>(((val - min_sum)*inv_delta)) + M;
+    	*qval = static_cast<uint16_t>(((val - min_sum)*inv_delta));
     }
 
     float unquantize_sum(uint16_t qval) const {
-    	float fval=qval+0.5-M-1;
+    	float fval=qval+0.5;
     	return (fval*delta)+min_sum;
     }
 
@@ -490,18 +506,122 @@ struct QuantizerMAX<uint16_t> {
 			__m256i highi = _mm256_cvtps_epi32(high);
 			__m256i packed16_interleaved4 = _mm256_packus_epi32(lowi, highi); // A B A B
 			__m256i packed16 = _mm256_permute4x64_epi64(packed16_interleaved4,0b11011000); // A A B B
-    		__m256i offset16 = _mm256_add_epi16(packed16, _mm256_set1_epi16(1));
-			_mm256_store_si256(t,offset16);
+			_mm256_store_si256(t,packed16);
 		}
 		for(int i=ksub/16;i<table_size/16;i++){
 			// Set to zero
 			__m256i * t = (__m256i*)&qval[i*16];
-			_mm256_store_si256(t,  _mm256_set1_epi16(1));
+			_mm256_store_si256(t,  _mm256_setzero_si256());
 		}
     }
 #endif
 
 };
+
+
+
+// Quantizer used for Qadc (query-time learned max and global_min)
+template<class T_TSC>
+struct QuantizerMAX_qadc : QuantizerMAX<T_TSC> {
+
+    QuantizerMAX_qadc(float *min_,float min_sum_, float max_, int M_): QuantizerMAX<T_TSC>(min_,min_sum_, max_, M_)  {
+    	// Override delta calculation with the more conservative delta of QuickADC
+        QuantizerMAX<T_TSC>::delta = (max_ - min_[0]) / QuantizerMAX<T_TSC>::QMAX;
+        QuantizerMAX<T_TSC>::inv_delta = 1.0f/QuantizerMAX<T_TSC>::delta;
+    }
+};
+
+
+#ifndef SWIG
+// Quantizer used for Bolt (trained-time learned max and global min)
+// Plus negative values quantized to zero.
+struct QuantizerMAX_bolt : QuantizerMAX<uint8_t>  {
+    float min_quant;
+    float max_quant;
+    int M;
+    float delta;
+    float inv_delta;
+    uint8_t QMAX;
+
+
+    QuantizerMAX_bolt(float min_q,float max_q, int M_): QuantizerMAX<uint8_t>(), min_quant(min_q),  max_quant(max_q), M(M_)  {
+        QMAX = std::numeric_limits<uint8_t>::max();
+      	FAISS_THROW_IF_NOT_MSG(max_quant > min_quant, "Max value to quantize must be larger than min value to quantize");
+        delta = (max_quant - min_quant) / QMAX;
+        inv_delta = 1.0f/delta;
+        //printf("[%f -- %f] (delta: %g, inv_delta: %g\n)",gmin,max,delta,inv_delta);
+    }
+
+    void quantize_val(float val, uint8_t* qval, int m) const {
+        float pval = std::min(255.0f,inv_delta*std::max(0.0f,val-min_quant));
+		if(pval <= 0){
+			*qval = 0;
+		}else if(val >= max_quant) {
+            *qval = QMAX; 
+        }else{
+        	*qval = static_cast<uint8_t>(pval);
+		}
+    }
+
+    void quantize_sum(float val, uint8_t* qval)  const {
+    	float pval = std::min(255.0f,inv_delta*std::max(0.0f,val-min_quant));
+		*qval = static_cast<uint8_t>(pval);
+    }
+
+    float unquantize_sum(uint8_t qval) const {
+    	float fval=qval+0.5;
+    	return (fval*delta)+min_quant;
+    }
+
+   void quantize_sum16(float val, int16_t* qval)  const {
+    	float pval = std::min(32767.0f,inv_delta*std::max(0.0f,val-M*min_quant));
+		*qval = static_cast<int16_t>(pval);
+    }
+
+	float unquantize_sum16(int16_t qval) const {
+    	float fval=qval+0.5;
+    	return (fval*delta)+M*min_quant;
+    }
+
+
+    inline void quantize_val_simd(const float* val, uint8_t* qval, const int table_size, const int ksub, const int m) const {
+    	FAISS_THROW_IF_NOT_MSG(ksub%16 == 0 && table_size%16 == 0 , "Requires table size and ksub to be multiples of of 16");
+    	// Set values 0 to ksub to their quantized values and values table_size to ksub-1, if any,  to zero
+    	const __m256 min_r = _mm256_set1_ps(min_quant);
+    	const __m256 inv_delta_r = _mm256_set1_ps(inv_delta);
+    	const __m128i shuf_r = _mm_set_epi8(15,14,13,12, 7,6,5,4  ,11,10,9,8, 3,2,1,0);
+    	for(int i=0;i<ksub/16;i++){
+    		__m128i * t = (__m128i*)&qval[i*16];
+    		float * f1 = (float*)&val[i*16];
+    		float * f2 = (float*)&val[i*16+8];
+    		__m256 low = _mm256_loadu_ps(f1); // 8x32
+    		__m256 high = _mm256_loadu_ps(f2); // 8x32
+
+    		low = _mm256_sub_ps(low, min_r);
+    		high = _mm256_sub_ps(high, min_r);
+    		low = _mm256_mul_ps(low, inv_delta_r);
+    		high = _mm256_mul_ps(high, inv_delta_r);
+
+    		__m256i lowi = _mm256_cvtps_epi32(low);
+    		__m256i highi = _mm256_cvtps_epi32(high);
+    		__m256i packed16_interleaved4 = _mm256_packs_epi32(lowi, highi); // A B A B
+    		__m128i p16i_l = _mm256_extracti128_si256(packed16_interleaved4,0); // A B
+    		__m128i p16i_h = _mm256_extracti128_si256(packed16_interleaved4,1); // A B
+    		__m128i packed8_interleaved4 = _mm_packus_epi16(p16i_l, p16i_h);  // A B A B
+    		// Reorganize...
+    		__m128i packed8 = _mm_shuffle_epi8(packed8_interleaved4, shuf_r); // A A A A B B B B
+    		_mm_store_si128(t,packed8);
+    	}
+    	for(int i=ksub/16;i<table_size/16;i++){
+    		// Set to zero
+    		__m128i * t = (__m128i*)&qval[i*16];
+    		_mm_store_si128(t,  _mm_set1_epi8(0));
+    	}
+    }
+
+
+};
+#endif
 
 
 /**
@@ -554,7 +674,7 @@ public:
     static constexpr size_t subcodes_per_lane = T_P;
     static constexpr size_t lanes_per_code = T_M/subcodes_per_lane;
     static constexpr size_t codes_per_group = simd_lanes;
-    static constexpr size_t group_size_bytes = lanes_per_code * codes_per_group * simd_lane_width_bits;
+    //static constexpr size_t group_size_bytes = lanes_per_code * codes_per_group * simd_lane_width_bytes;
     static constexpr size_t cross_lane=sizeof(T_TSCMMXL)/sizeof(T_TSCMM);
 
     struct group {
@@ -569,6 +689,12 @@ public:
     static_assert(sizeof(T_TSC)*lanes_per_code*codes_per_group == sizeof(T_TSCMMXL)*lanes_per_code/cross_lane, "Incorrect layout specification");
 
     size_t d;              ///< size of the input vectors
+
+	// Indicator for initial scan (consumed by IndexVPQ, used for overwriting the default value for Bolt : Bolt use 0)
+   int initial_scan_estim_parameter=4;
+   int get_initial_scan_estim_parameter(){
+	   return initial_scan_estim_parameter;
+   } 
 
    // Layout (exemple for AVX512 - 16 bit distances)
    // a1a2a3 b1b2b3 c1c2c3 ... z1z2z3  = 16 bits x 32 = 512 bits
@@ -646,7 +772,7 @@ public:
 
     // Train the product quantizer on a set of points. A clustering
     // can be set on input to define non-default clustering parameters
-    void train (int n, const float *x) {
+    virtual void train (int n, const float *x) {
 		if (train_type != Train_shared) {
 			train_type_t final_train_type;
 			final_train_type = train_type;
@@ -669,7 +795,7 @@ public:
 							dsub[m] * sizeof(float));
 
 				Clustering clus (dsub[m], ksub[m], cp);
-
+				clus.verbose = this->verbose;
 				// we have some initialization for the centroids
 				if (final_train_type != Train_default) {
 					clus.centroids.resize (dsub[m] * ksub[m]);
@@ -1128,10 +1254,48 @@ public:
 		}
 
     }
-
-    typedef QuantizerMAX<T_TSC> VPQQuant;
+	typedef QuantizerMAX<T_TSC> VPQQuant; 
     typedef T_TSCMM QuantTableLane;
 
+	// Protected for use by subclasses in quantize tables
+	virtual void build_mm_tables(const float* dis_table, T_TSCMM* mm_dis_tables, QuantizerMAX<T_TSC> * quant) const{
+		// Get pointer to primitive type array
+		T_TSC* q_dis_tables = (T_TSC*)mm_dis_tables;
+
+		for(int il=0;il<lanes_per_code/cross_lane;il++){ // For each group of lanes (T_M/T_P/T_XL)
+			for(int j=0;j<subcodes_per_lane;j++){ // For each sub-code within lane (T_P)
+				//T_TSC* qt = q_dis_tables[dt_lanes_offset[il/T_XL*subcodes_per_lane+j]*T_LANES];
+					// Lane(s) at position (il*T_XL*T_P + j*T_XL + i )  will hold table for quantizer (il*T_XL*T_P + i*T_P + j)
+					// A distance table may require multiple SIMD lanes... cross lane has the priority in that case... (poorly tested)
+					int lane_group_pos = il*T_P+j;
+					int lane_offset = dt_lanes_offset[lane_group_pos]*simd_lanes;
+					int lane_per_table= dt_lanes[lane_group_pos]/cross_lane;
+					for(int l=0;l<lane_per_table;l++){
+						for(int n=0;n<cross_lane;n++){
+#define SIMD_QUANT
+#ifdef SIMD_QUANT
+							int lane_offset_f = lane_offset + l*cross_lane*simd_lanes + n*simd_lanes;
+							int m = (il*cross_lane+n)*subcodes_per_lane+j;
+							int ksub_offset_r = ksub_offset[m]+l*simd_lanes;
+							int ksub_remaining = ksub[m]-l*simd_lanes;
+							quant->quantize_val_simd(&dis_table[ksub_offset_r], (T_TSC*)&q_dis_tables[lane_offset_f], simd_lanes, ksub_remaining, m);
+#else
+							for(int o=0;o<simd_lanes;o++){
+								int ix = l*simd_lanes+o;
+								int lane_offset_f = lane_offset + l*cross_lane*simd_lanes + n*simd_lanes+o;
+								int m = (il*cross_lane+n)*subcodes_per_lane+j;
+								if(ix < ksub[m]){
+									qmax->quantize_val(dis_table[ksub_offset[m]+ix], &q_dis_tables[lane_offset_f],m);
+								}else{
+									q_dis_tables[lane_offset_f]=0;
+								}
+							}
+#endif
+						}
+					}
+			}
+		}
+	}
 
     virtual VPQQuant * quantize_tables(const float*  dis_table, QuantTableLane* mm_dis_tables, float max) const{
     	/* Find the global per-table minimum */
@@ -1152,44 +1316,9 @@ public:
     		return nullptr;
     	}else{
     		/* We can build a quantizer, we will need to scan the inverted list/cell */
-			VPQQuant * qmax = new VPQQuant(gmin_current,gmin_sum,max,T_M);
-			// Get pointer to primitive type array
-			T_TSC* q_dis_tables = (T_TSC*)mm_dis_tables;
-
-			for(int il=0;il<lanes_per_code/cross_lane;il++){ // For each group of lanes (T_M/T_P/T_XL)
-				for(int j=0;j<subcodes_per_lane;j++){ // For each sub-code within lane (T_P)
-					//T_TSC* qt = q_dis_tables[dt_lanes_offset[il/T_XL*subcodes_per_lane+j]*T_LANES];
-						// Lane(s) at position (il*T_XL*T_P + j*T_XL + i )  will hold table for quantizer (il*T_XL*T_P + i*T_P + j)
-						// A distance table may require multiple SIMD lanes... cross lane has the priority in that case... (poorly tested)
-						int lane_group_pos = il*T_P+j;
-						int lane_offset = dt_lanes_offset[lane_group_pos]*simd_lanes;
-						int lane_per_table= dt_lanes[lane_group_pos]/cross_lane;
-						for(int l=0;l<lane_per_table;l++){
-							for(int n=0;n<cross_lane;n++){
-	#define SIMD_QUANT
-	#ifdef SIMD_QUANT
-								int lane_offset_f = lane_offset + l*cross_lane*simd_lanes + n*simd_lanes;
-								int m = (il*cross_lane+n)*subcodes_per_lane+j;
-								int ksub_offset_r = ksub_offset[m]+l*simd_lanes;
-								int ksub_remaining = ksub[m]-l*simd_lanes;
-								qmax->quantize_val_simd(&dis_table[ksub_offset_r], (T_TSC*)&q_dis_tables[lane_offset_f], simd_lanes, ksub_remaining, m);
-	#else
-								for(int o=0;o<simd_lanes;o++){
-									int ix = l*simd_lanes+o;
-									int lane_offset_f = lane_offset + l*cross_lane*simd_lanes + n*simd_lanes+o;
-									int m = (il*cross_lane+n)*subcodes_per_lane+j;
-									if(ix < ksub[m]){
-										qmax->quantize_val(dis_table[ksub_offset[m]+ix], &q_dis_tables[lane_offset_f],m);
-									}else{
-										q_dis_tables[lane_offset_f]=0;
-									}
-								}
-	#endif
-							}
-						}
-				}
-			}
-			return qmax;
+			VPQQuant * quant = new VPQQuant(gmin_current,gmin_sum,max,T_M);
+			this->build_mm_tables(dis_table, mm_dis_tables, quant);
+			return quant;
     	}
     }
 
@@ -1716,7 +1845,7 @@ struct VecProductQuantizer_NoVecTable : public AbstractVecProductQuantizer<TT_M,
 		FAISS_THROW_IF_NOT_MSG(this->cross_lane == 1 , "This requires quantize tables not layed out for cross-lanes operations");
 
 		for (size_t j = 0; j < ncodes; j++) {
-			int32_t dis = 0;
+			int32_t dis = 1;
 
 			for (size_t m = 0; m < TT_M; m+=1) {
 				TT_TSC* quant_dis_table = (TT_TSC*)&mm_dis_tables[this->dt_lanes_offset[m]];
@@ -1744,6 +1873,111 @@ struct VecProductQuantizer_NoVecTable : public AbstractVecProductQuantizer<TT_M,
 };
 
 
+template<int TT_M, class TT_TSCMM, class TT_TSCMMXL>
+struct VecProductQuantizer_BoltNoVec : virtual public AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,TT_TSCMM,TT_TSCMMXL> {
+
+	typedef typename AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,TT_TSCMM,TT_TSCMMXL>::group group;
+	typedef typename AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,TT_TSCMM,TT_TSCMMXL>::VPQQuant VPQQuant;
+
+	float best_mindist;
+	float best_maxdist;
+
+
+	VecProductQuantizer_BoltNoVec(size_t d) : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,TT_TSCMM,TT_TSCMMXL>(d) {
+			this->initial_scan_estim_parameter=0;
+	}
+
+	VecProductQuantizer_BoltNoVec() : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,TT_TSCMM,TT_TSCMMXL>() {
+			this->initial_scan_estim_parameter=0;
+	}
+
+	void train (int n, const float *x){
+
+		float best_loss = std::numeric_limits<float>::infinity();
+
+		// Train the PQ Code
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,TT_TSCMM,TT_TSCMMXL>::train(n,x);
+
+		// Train the distance quantizer
+		// Pick up to 10000 vector as queries
+		std::vector<int> perm (n);
+		int seed=1234;
+        rand_perm (perm.data (), n, seed);
+        int nx = std::min(10000,n);
+        std::vector<float> x_queries(nx * this->d);
+		std::vector<float> true_dists(nx * this->ksub_total);
+		for (int i = 0; i < nx; i++)
+            memcpy (x_queries.data() + i * this->d, x + perm[i] * this->d, sizeof(float) * this->d);
+        this->compute_distance_tables(nx,x_queries.data(),true_dists.data()); //x = nx*d, nx*M*ksub
+		std::sort(true_dists.begin(),true_dists.end());
+
+		const std::vector<float> alphas ({.001, .002, .005, .01, .02, .05, .1});
+		for(float a : alphas){
+			float lower_quantile=true_dists[static_cast<int>(std::floor(a*nx*this->ksub_total))];
+			float upper_quantile=true_dists[static_cast<int>(std::ceil((1.0-a)*nx*this->ksub_total))];
+			float scale=255.0/(upper_quantile-lower_quantile);
+			float loss=0.0;
+			for(int i=0;i<nx*this->ksub_total;i++){
+				float quant_dist = std::min(255.0f,scale*std::max(0.0f,true_dists[i] - lower_quantile));
+				loss += (true_dists[i]-quant_dist) * (true_dists[i]-quant_dist);
+			}
+			if(loss < best_loss){
+				best_mindist=lower_quantile;
+				best_maxdist=upper_quantile;
+				best_loss=loss;
+			}
+		}
+	}
+
+	virtual inline void lookup_and_update_heap_simd(size_t ncodes, size_t offset, const group * codes,
+		                                                 const float * dis_table, TT_TSCMM * mm_dis_tables,  VPQQuant * qmax,
+														 int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
+														 long key, const long* list_ids, bool store_pairs) const override {
+
+
+
+		for (size_t j = 0; j < ncodes; j++) {
+			int32_t dis = 0; 
+
+			for (size_t m = 0; m < TT_M; m+=1) {
+				int c = this->get_code_component(codes, offset+j, m);
+				float disf = dis_table[this->ksub_offset[m] + c];
+				uint8_t dis8; // Bolt is defined for 8-bit values
+				qmax->quantize_val(disf, &dis8,m);
+				if(dis8 < 0) {
+					printf("Warning, dis8 is < 0 -- %d %d %f [%f %f]\n",std::numeric_limits<uint8_t>::max(),(int)dis8,disf,qmax->min[m],qmax->max);
+				}
+				dis += static_cast<int32_t>(dis8);
+			}
+
+			// Apply saturation (8 or 16 bit, the paper use the 16 bit variant / the repo contain an 8 bit variant)
+			dis = std::min((int32_t)std::numeric_limits<int16_t>::max(), dis);
+
+			long id;
+			if(store_pairs){
+				id = (key << 32 | (j+offset));
+			}else{
+				id = list_ids[j+offset];
+			}
+			heap_pushpop<typename AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,TT_TSCMM,TT_TSCMMXL>::CHeap>(k, heap_dis, heap_ids, (reinterpret_cast<QuantizerMAX_bolt*>(qmax))->unquantize_sum16(dis)+dis0, id);
+		}
+
+
+	}
+
+
+	VPQQuant * quantize_tables(const float*  dis_table, TT_TSCMM* mm_dis_tables, float max) const override{
+    	VPQQuant* quant = new QuantizerMAX_bolt(best_mindist,best_maxdist,TT_M);
+		this->build_mm_tables(dis_table,mm_dis_tables,quant);
+		return quant;
+    }
+
+
+};
+
+
 template<int TT_M, int TT_P, int TT_PG_0, int TT_PG_1, int TT_PG_2, int TT_PG_3, class TT_TSC, class TT_TSCMM, class TT_TSCMMXL>
 struct VecProductQuantizer_NoVec : public AbstractVecProductQuantizer<TT_M,TT_P,TT_PG_0,TT_PG_1,TT_PG_2,TT_PG_3,TT_TSC,TT_TSCMM,TT_TSCMMXL> {
 
@@ -1767,14 +2001,16 @@ struct VecProductQuantizer_NoVec : public AbstractVecProductQuantizer<TT_M,TT_P,
 
 
 		for (size_t j = 0; j < ncodes; j++) {
-			int32_t dis = 1; // 1 for unsigned distance
-//FIXME dis=0 for signed distance
+			int32_t dis = 0;
 
 			for (size_t m = 0; m < TT_M; m+=1) {
 				int c = this->get_code_component(codes, offset+j, m);
 				float disf = dis_table[this->ksub_offset[m] + c];
 				TT_TSC dis8;
 				qmax->quantize_val(disf, &dis8,m);
+				if(dis8 < 0) {
+					printf("Warning, dis8 is < 0 -- %d %d %f [%f %f]\n",std::numeric_limits<TT_TSC>::max(),(int)dis8,disf,qmax->min[m],qmax->max);
+				}
 				dis += static_cast<int32_t>(dis8);
 			}
 
@@ -1793,29 +2029,8 @@ struct VecProductQuantizer_NoVec : public AbstractVecProductQuantizer<TT_M,TT_P,
 
 	}
 
-
 	/* We do not need (and must not since memory is not necessarily of the right size) build quantized lookup tables */
-	VPQQuant * quantize_tables(const float*  dis_table, TT_TSCMM* mm_dis_tables, float max) const override{
-		/* Find the global per-table minimum */
-		float gmin_global=std::numeric_limits<float>::infinity();
-		float gmin_sum=0.0;
-		float gmin_current[TT_M];
-		for(size_t m=0;m<TT_M;m++){
-			gmin_current[m]=std::numeric_limits<float>::infinity();
-			for(size_t i=0;i<this->ksub[m];i++){
-				gmin_current[m]=std::min(dis_table[this->ksub_offset[m]+i],gmin_current[m]);
-				gmin_global=std::min(dis_table[this->ksub_offset[m]+i],gmin_global);
-			}
-			gmin_sum+=gmin_current[m];
-		}
-
-    	if(gmin_sum >= max){
-    		/* We cannot build a quantizer as all distances quantize to infinite, the whole cell/inverted list can be skipped */
-    		return nullptr;
-    	}else{
-    		return new VPQQuant(gmin_current,gmin_sum,max,TT_M);
-    	}
-	}
+	void build_mm_tables(const float*  dis_table, TT_TSCMM* mm_dis_tables, QuantizerMAX<TT_TSC> * quant) const override {} 
 
 };
 
@@ -1841,27 +2056,8 @@ struct VecProductQuantizer_NoVecNoQuant : public AbstractVecProductQuantizer<TT_
 	}
 
 	/* We do not need (and must not since memory is not necessarily of the right size) build quantized lookup tables */
-	VPQQuant * quantize_tables(const float*  dis_table, TT_TSCMM* mm_dis_tables, float max) const override{
-		/* Find the global per-table minimum */
-		float gmin_global=std::numeric_limits<float>::infinity();
-		float gmin_sum=0.0;
-		float gmin_current[TT_M];
-		for(size_t m=0;m<TT_M;m++){
-			gmin_current[m]=std::numeric_limits<float>::infinity();
-			for(size_t i=0;i<this->ksub[m];i++){
-				gmin_current[m]=std::min(dis_table[this->ksub_offset[m]+i],gmin_current[m]);
-				gmin_global=std::min(dis_table[this->ksub_offset[m]+i],gmin_global);
-			}
-			gmin_sum+=gmin_current[m];
-		}
-
-    	if(gmin_sum >= max){
-    		/* We cannot build a quantizer as all distances quantize to infinite, the whole cell/inverted list can be skipped */
-    		return nullptr;
-    	}else{
-    		return new VPQQuant(gmin_current,gmin_sum,max,TT_M);
-    	}
-	}
+	void build_mm_tables(const float*  dis_table, TT_TSCMM* mm_dis_tables, QuantizerMAX<TT_TSC> * quant) const override {} 
+	
 };
 
 
@@ -1933,7 +2129,7 @@ struct VecProductQuantizer_4_AVX256 : public AbstractVecProductQuantizer<TT_M,2,
 			// Reduce
 			const __m128i sum_a = _mm256_extracti128_si256(twolane_sum,0);
 			const __m128i sum_b = _mm256_extracti128_si256(twolane_sum,1);
-			const __m128i candidates = _mm_adds_epu8(sum_a, sum_b);
+			const __m128i candidates = _mm_adds_epi8(sum_a, sum_b);
 
 			// Compare
 			const __m128i compare = _mm_cmplt_epi8(candidates, bh_bound_sse);
@@ -1955,13 +2151,14 @@ struct VecProductQuantizer_4_AVX256 : public AbstractVecProductQuantizer<TT_M,2,
 
 		}
 
-	};
+	}
+	
+	
 };
 
 
-
 template<int TT_M>
-struct VecProductQuantizer_4_AVX256_unsigned : public AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,__m128i,__m256i> {
+struct VecProductQuantizer_4_AVX256_unsigned : virtual public AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,__m128i,__m256i> {
 
 	typedef typename AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,__m128i,__m256i>::group group;
 	typedef typename AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,__m128i,__m256i>::VPQQuant VPQQuant;
@@ -1978,9 +2175,9 @@ struct VecProductQuantizer_4_AVX256_unsigned : public AbstractVecProductQuantize
 
 	//__attribute__((optimize("unroll-loops")))
 	inline void lookup_and_update_heap_simd(size_t ncodes, size_t offset, const group * __restrict codes,
-		                                                 const float * __restrict dis_table, __m128i *__restrict mm_dis_tables1, VPQQuant * qmax,
-														 int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
-														 long key, const long* list_ids, bool store_pairs) const override {
+		                                    const float * __restrict dis_table, __m128i *__restrict mm_dis_tables1, VPQQuant * qmax,
+											int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
+											long key, const long* list_ids, bool store_pairs) const override {
 
 		const __m256i low_mask_avx = _mm256_set1_epi8(0x0f);
 
@@ -2008,8 +2205,8 @@ struct VecProductQuantizer_4_AVX256_unsigned : public AbstractVecProductQuantize
 
 		for (size_t j = start_group_index; j <= last_group_index; j++) {
 
-			//__m256i twolane_sum = _mm256_setzero_si256();
-			__m256i twolane_sum = _mm256_set1_epi8(1);
+			__m256i twolane_sum =  _mm256_setzero_si256();
+			
 			// Rows 1..ROW_COUNT
 			for(int row_i = 0; row_i < lanes_per_code/2; ++row_i) {
 				// Lookup add (low)
@@ -2032,8 +2229,7 @@ struct VecProductQuantizer_4_AVX256_unsigned : public AbstractVecProductQuantize
 			// Reduce
 			const __m128i sum_a = _mm256_extracti128_si256(twolane_sum,0);
 			const __m128i sum_b = _mm256_extracti128_si256(twolane_sum,1);
-			const __m128i sum_b_minus1 = _mm_subs_epu8(sum_b,_mm_set1_epi8(1));
-			const __m128i candidates = _mm_adds_epu8(sum_a, sum_b_minus1);
+			const __m128i candidates = _mm_adds_epu8(sum_a, sum_b);
 
 			// Compare
 			const __m128i compare = _mm_cmplt_epu8(candidates, bh_bound_sse);
@@ -2054,9 +2250,247 @@ struct VecProductQuantizer_4_AVX256_unsigned : public AbstractVecProductQuantize
 			//		candidates_mem, bh, labels, labels_offset);
 
 		}
+	}
+
+
+};
+
+template<int TT_M>
+struct VecProductQuantizer_4_AVX256_Bolt16 : public VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i> {
+
+	typedef typename VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>::group group;
+	typedef typename VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>::VPQQuant VPQQuant;
+
+
+
+	VecProductQuantizer_4_AVX256_Bolt16(size_t d) : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,__m128i,__m256i>(d),
+		VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>(d) {
+			this->initial_scan_estim_parameter=0;
+	}
+
+	VecProductQuantizer_4_AVX256_Bolt16() : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,__m128i,__m256i>(),
+		VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>() {
+			this->initial_scan_estim_parameter=0;
+		}
+
+	// A specific method is required for bolt as due to upcasting, the result vector is equal to twice the T_TSCMM
+	// Also note that it does not call unquantize_sum (which takes an uint8_t but unquantize_sum16).
+	inline void extract_val_loop_bolt(unsigned cmp, const __m256i& candidates, size_t j, bool store_pairs, long key, const long * list_ids, float dis0,
+			                int& k, float* __restrict__  heap_dis, long * __restrict__  heap_ids,
+							const QuantizerMAX_bolt* qmax, __m256i& bh_bound_avx) const {
+
+		if (cmp) {
+			int16_t bh_bound_quant;
+			int16_t candidates_mem[this->codes_per_group];
+			const unsigned first_code_i = 0 + j * this->codes_per_group;
+			_mm256_storeu_si256(reinterpret_cast<__m256i*>(candidates_mem), candidates);
+			//_mm_prefetch(&list_ids[first_code_i],_MM_HINT_T0);
+
+			int pos;
+			int tmp_mask;
+			FOREACH_IN_MASK32(pos, cmp, tmp_mask ){
+				long id;
+				if (store_pairs) {
+					id = (key << 32 | (first_code_i + pos));
+				} else {
+					id = list_ids[first_code_i + pos];
+				}
+				heap_pushpop<CMax<float,long > >(k, heap_dis, heap_ids, qmax->unquantize_sum16(candidates_mem[pos]) + dis0, id);
+			}
+
+			qmax->quantize_sum16(heap_dis[0] - dis0, &bh_bound_quant);
+			bh_bound_avx = _mm256_set1_epi16(bh_bound_quant);
+		}
+	}
+
+
+	//__attribute__((optimize("unroll-loops")))
+	inline void lookup_and_update_heap_simd(size_t ncodes, size_t offset, const group * __restrict codes,
+		                                                 const float * __restrict dis_table, __m128i *__restrict mm_dis_tables1, VPQQuant * qmax,
+														 int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
+														 long key, const long* list_ids, bool store_pairs) const override {
+
+		const __m256i low_mask_avx = _mm256_set1_epi8(0x0f);
+
+		// Access static member of super class (shortcut)
+		constexpr int codes_per_group = AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m256i>::codes_per_group;
+		constexpr int lanes_per_code = AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m256i>::lanes_per_code;
+
+
+		__m256i * __restrict mm_dis_tables = (__m256i*)mm_dis_tables1;
+
+		// Binheap extraction
+		int16_t bh_bound_quant;
+		(reinterpret_cast<QuantizerMAX_bolt*>(qmax))->quantize_sum16(heap_dis[0]-dis0, &bh_bound_quant);
+		__m256i bh_bound_avx = _mm256_set1_epi16(bh_bound_quant);
+
+		int start_group_index = offset / codes_per_group;
+		int start_index_in_group = offset % codes_per_group;
+
+		int last_group_index = (offset+ncodes-1)/codes_per_group;
+		int last_index_in_group = (offset+ncodes-1) % codes_per_group;
+
+		int start_mask=~((1 << start_index_in_group)-1);  //2 => 0b0000011 => 0b11111100;
+		int end_mask=((1 <<(last_index_in_group+1)) -1); //2 => 3 => 0b0000111
+
+
+		for (size_t j = start_group_index; j <= last_group_index; j++) {
+
+			__m256i twolane_sum_lo = _mm256_setzero_si256();
+			__m256i twolane_sum_hi = _mm256_setzero_si256();
+			// Rows 1..ROW_COUNT
+			for(int row_i = 0; row_i < lanes_per_code/2; ++row_i) {
+				// Lookup add (low)
+				const __m256i comps = _mm256_load_si256(&codes[j].mmxl[row_i]);
+				const __m256i masked = _mm256_and_si256(comps, low_mask_avx);
+				const __m256i partiala = _mm256_shuffle_epi8(mm_dis_tables[2*row_i], masked);
+				const __m256i partiala_lo = _mm256_unpacklo_epi8(partiala, _mm256_setzero_si256());
+				const __m256i partiala_hi = _mm256_unpackhi_epi8(partiala, _mm256_setzero_si256());
+				
+
+				// Lookup add (high)
+				const __m256i compsb = _mm256_srli_epi64(comps, 4);
+				const __m256i maskedb = _mm256_and_si256(compsb, low_mask_avx);
+				const __m256i partialb = _mm256_shuffle_epi8(mm_dis_tables[2*row_i+1], maskedb);
+				const __m256i partialb_lo = _mm256_unpacklo_epi8(partialb, _mm256_setzero_si256());
+				const __m256i partialb_hi = _mm256_unpackhi_epi8(partialb, _mm256_setzero_si256());
+				
+
+				// Unpack
+				const __m256i partial_sum_lo = _mm256_add_epi16(partiala_lo, partialb_lo);
+				const __m256i partial_sum_hi = _mm256_add_epi16(partiala_hi, partialb_hi);
+				twolane_sum_lo = _mm256_add_epi16(twolane_sum_lo,partial_sum_lo);
+				twolane_sum_hi = _mm256_add_epi16(twolane_sum_hi,partial_sum_hi);
+			}
+
+			// Reduce
+			// [LO_HI LO_LO]   [HI_HI HI_LO]
+			// [HI_HI LO_LO]   [HI_LO LO_HI] => [HI_HI+HI_LO  LO_HI+LO_LO] 
+			const __m256i sum_a = _mm256_blend_epi32(twolane_sum_lo,twolane_sum_hi,0xf0);
+			const __m256i sum_b = _mm256_permute2x128_si256(twolane_sum_lo, twolane_sum_hi, 0x21);
+			const __m256i candidates = _mm256_add_epi16(sum_a, sum_b);
+
+			// Compare
+			const __m256i compare = _mm256_cmpgt_epi16(bh_bound_avx,candidates);
+			const __m128i compare_lo = _mm256_extracti128_si256(compare,0);
+			const __m128i compare_hi = _mm256_extracti128_si256(compare,1);
+			const __m128i compare8 = _mm_packs_epi16(compare_lo,compare_hi);
+			int cmp = _mm_movemask_epi8(compare8); // Keep only 16 low bits, rest is noise.
+
+			// Apply masks for potentially incomplete first and last groups
+			if(unlikely(j == start_group_index)){
+				cmp &= start_mask;
+			}
+			if(unlikely(j == last_group_index)){
+				cmp &= end_mask;
+			}
+
+			if(cmp){
+				this->extract_val_loop_bolt(cmp, candidates, j, store_pairs, key, list_ids, dis0, k, heap_dis, heap_ids, reinterpret_cast<QuantizerMAX_bolt*>(qmax), bh_bound_avx);
+			}
+			//compare_extract_matches_sse(candidates, bh_bound_sse, scanned, max_scan,
+			//		candidates_mem, bh, labels, labels_offset);
+
+		}
 
 	};
 };
+
+//#endif
+
+template<int TT_M>
+struct VecProductQuantizer_4_AVX256_qadc : public VecProductQuantizer_4_AVX256<TT_M>{
+
+	typedef typename VecProductQuantizer_4_AVX256<TT_M>::group group;
+	typedef typename VecProductQuantizer_4_AVX256<TT_M>::VPQQuant VPQQuant;
+
+
+
+	VecProductQuantizer_4_AVX256_qadc(size_t d) : /* dimensionality of the input vectors */
+		VecProductQuantizer_4_AVX256<TT_M>(d) {
+	}
+
+	VecProductQuantizer_4_AVX256_qadc() : /* dimensionality of the input vectors */
+		VecProductQuantizer_4_AVX256<TT_M>() {
+	}
+
+    //typedef QuantizerMAX<int8_t> VPQQuant;
+    typedef __m128i QuantTableLane;
+
+
+    virtual VPQQuant * quantize_tables(const float*  dis_table, QuantTableLane* mm_dis_tables, float max) const override{
+
+    	/* Find the global per-table minimum */
+    	float gmin_global=std::numeric_limits<float>::infinity();
+    	float gmin_sum=0.0;
+    	float gmin_current[TT_M];
+    	for(size_t m=0;m<TT_M;m++){
+    		for(size_t i=0;i<this->ksub[m];i++){
+    			gmin_global=std::min(dis_table[this->ksub_offset[m]+i],gmin_global);
+    		}
+    	}
+
+    	for(size_t m=0;m<TT_M;m++){
+    		gmin_current[m]=gmin_global;
+    		gmin_sum+=gmin_global;
+    	}
+
+    	if(gmin_sum >= max){
+    		/* We cannot build a quantizer as all distances quantize to infinite, the whole cell/inverted list can be skipped */
+    		return nullptr;
+    	}else{
+    		/* We can build a quantizer, we will need to scan the inverted list/cell */
+			VPQQuant * qmax = new QuantizerMAX_qadc<int8_t>(gmin_current,gmin_sum,max,TT_M);
+			this->build_mm_tables(dis_table, mm_dis_tables, qmax);
+			return qmax;
+    	}
+    }
+};
+
+
+template<int TT_M>
+struct VecProductQuantizer_4_AVX256_Bolt8 : public VecProductQuantizer_4_AVX256_unsigned<TT_M>, public VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>{
+
+	typedef typename VecProductQuantizer_4_AVX256_unsigned<TT_M>::group group;
+	typedef typename VecProductQuantizer_4_AVX256_unsigned<TT_M>::VPQQuant VPQQuant;
+
+	VecProductQuantizer_4_AVX256_Bolt8(size_t d) : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,__m128i,__m256i>(d),
+		VecProductQuantizer_4_AVX256_unsigned<TT_M>(d), 
+		VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>(d)
+		{
+			this->initial_scan_estim_parameter=0;
+		}
+
+	VecProductQuantizer_4_AVX256_Bolt8() : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,uint8_t,__m128i,__m256i>(),
+		VecProductQuantizer_4_AVX256_unsigned<TT_M>(), 
+		VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>()
+		{
+			this->initial_scan_estim_parameter=0;
+		}
+
+
+	using VecProductQuantizer_4_AVX256_unsigned<TT_M>::build_mm_tables;
+	using VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>::quantize_tables;
+	using VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>::get_initial_scan_estim_parameter;
+	using VecProductQuantizer_BoltNoVec<TT_M,__m128i,__m256i>::train;
+
+	inline void lookup_and_update_heap_simd(size_t ncodes, size_t offset, const group * __restrict codes,
+		                                    const float * __restrict dis_table, __m128i *__restrict mm_dis_tables1, VPQQuant * qmax,
+											int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
+											long key, const long* list_ids, bool store_pairs) const override {
+      VecProductQuantizer_4_AVX256_unsigned<TT_M>::lookup_and_update_heap_simd(ncodes, offset, codes,
+		                                    dis_table, mm_dis_tables1, qmax,
+											k, heap_dis, heap_ids, dis0,
+											key, list_ids, store_pairs);
+											}
+
+};
+
+
 
 #ifdef __AVX512F__
 template<int TT_M>
@@ -2107,7 +2541,7 @@ struct VecProductQuantizer_4_AVX512_unsigned : public AbstractVecProductQuantize
 
 		for (size_t j = start_group_index; j <= last_group_index; j++) {
 
-			__m512i fourlane_sum = _mm512_set1_epi8(1);
+			__m512i fourlane_sum = _mm512_setzero_si512();
 
 			// Rows 0..ROW_COUNT
 			for(int row_i = 0; row_i < lanes_per_code/4; ++row_i) {
@@ -2127,9 +2561,9 @@ struct VecProductQuantizer_4_AVX512_unsigned : public AbstractVecProductQuantize
 
 			// Reduce
 			__m128i sum_a = _mm512_extracti32x4_epi32(fourlane_sum,0);
-			__m128i sum_b = _mm_subs_epu8(_mm512_extracti32x4_epi32(fourlane_sum,1), _mm_set1_epi8(1));
-			__m128i sum_c = _mm_subs_epu8(_mm512_extracti32x4_epi32(fourlane_sum,2), _mm_set1_epi8(1));
-			__m128i sum_d = _mm_subs_epu8(_mm512_extracti32x4_epi32(fourlane_sum,3), _mm_set1_epi8(1));
+			__m128i sum_b = _mm512_extracti32x4_epi32(fourlane_sum,1);
+			__m128i sum_c = _mm512_extracti32x4_epi32(fourlane_sum,2);
+			__m128i sum_d = _mm512_extracti32x4_epi32(fourlane_sum,3);
 
 
 			const __m128i candidates =  _mm_adds_epu8(
@@ -2168,6 +2602,124 @@ struct VecProductQuantizer_4_AVX512_unsigned : public VecProductQuantizer_NoVec<
 
 	VecProductQuantizer_4_AVX512_unsigned() : /* dimensionality of the input vectors */
 		VecProductQuantizer_NoVec<TT_M,2,4,4,0,0,uint8_t,__m128i,__m512i>() {
+	}
+
+};
+
+#endif
+
+
+
+#ifdef __AVX512F__
+template<int TT_M>
+struct VecProductQuantizer_4_AVX512 : public AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i> {
+
+	typedef typename AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i>::group group;
+	typedef typename AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i>::VPQQuant VPQQuant;
+
+
+
+	VecProductQuantizer_4_AVX512(size_t d) : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i>(d) {
+	}
+
+	VecProductQuantizer_4_AVX512() : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i>() {
+	}
+
+	//__attribute__((optimize("unroll-loops")))
+	inline void lookup_and_update_heap_simd(size_t ncodes, size_t offset, const group * __restrict codes,
+		                                                 const float * __restrict dis_table, __m128i *__restrict mm_dis_tables1, VPQQuant * qmax,
+														 int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
+														 long key, const long* list_ids, bool store_pairs) const override {
+
+		const __m512i low_mask_avx = _mm512_set1_epi8(0x0f);
+
+		// Access static member of super class (shortcut)
+		constexpr int codes_per_group = AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i>::codes_per_group;
+		constexpr int lanes_per_code = AbstractVecProductQuantizer<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i>::lanes_per_code;
+
+
+		__m512i * __restrict mm_dis_tables = (__m512i*)mm_dis_tables1;
+
+		// Binheap extraction
+		int8_t bh_bound_quant;
+		qmax->quantize_sum(heap_dis[0]-dis0, &bh_bound_quant);
+		__m128i bh_bound_sse = _mm_set1_epi8(bh_bound_quant);
+
+		int start_group_index = offset / codes_per_group;
+		int start_index_in_group = offset % codes_per_group;
+
+		int last_group_index = (offset+ncodes-1)/codes_per_group;
+		int last_index_in_group = (offset+ncodes-1) % codes_per_group;
+
+		int start_mask=~((1 << start_index_in_group)-1);  //2 => 0b0000011 => 0b11111100;
+		int end_mask=((1 <<(last_index_in_group+1)) -1); //2 => 3 => 0b0000111
+
+
+		for (size_t j = start_group_index; j <= last_group_index; j++) {
+
+			__m512i fourlane_sum = _mm512_setzero_si512();
+
+			// Rows 0..ROW_COUNT
+			for(int row_i = 0; row_i < lanes_per_code/4; ++row_i) {
+				// Lookup add (low)
+				const __m512i comps = _mm512_load_si512(&codes[j].mmxl[row_i]);
+				const __m512i masked = _mm512_and_si512(comps, low_mask_avx);
+				const __m512i partiala = _mm512_shuffle_epi8(mm_dis_tables[2*row_i], masked);
+				//fourlane_sum = _mm512_adds_epu8(fourlane_sum,partiala);
+
+				// Lookup add (high)
+				const __m512i compsb = _mm512_srli_epi64(comps, 4);
+				const __m512i maskedb = _mm512_and_si512(compsb, low_mask_avx);
+				const __m512i partialb = _mm512_shuffle_epi8(mm_dis_tables[2*row_i+1], maskedb);
+				const __m512i partial_sum = _mm512_adds_epi8(partiala,partialb);
+				fourlane_sum = _mm512_adds_epi8(fourlane_sum,partial_sum);
+			}
+
+			// Reduce
+			__m128i sum_a = _mm512_extracti32x4_epi32(fourlane_sum,0);
+			__m128i sum_b = _mm512_extracti32x4_epi32(fourlane_sum,1);
+			__m128i sum_c = _mm512_extracti32x4_epi32(fourlane_sum,2);
+			__m128i sum_d = _mm512_extracti32x4_epi32(fourlane_sum,3);
+
+
+			const __m128i candidates =  _mm_adds_epi8(
+					_mm_adds_epi8(sum_a,sum_b),
+					_mm_adds_epi8(sum_c,sum_d));
+
+			// Compare
+			const __m128i compare = _mm_cmplt_epi8(candidates, bh_bound_sse);
+			int cmp = _mm_movemask_epi8(compare);
+
+			// Apply masks for potentially incomplete first and last groups
+			if(unlikely(j == start_group_index)){
+				cmp &= start_mask;
+			}
+			if(unlikely(j == last_group_index)){
+				cmp &= end_mask;
+			}
+
+			if(cmp){
+				this->extract_val128(cmp, candidates, j, store_pairs, key, list_ids, dis0, k, heap_dis, heap_ids, qmax, bh_bound_sse);
+			}
+			//compare_extract_matches_sse(candidates, bh_bound_sse, scanned, max_scan,
+			//		candidates_mem, bh, labels, labels_offset);
+
+		}
+
+	};
+};
+#else
+template<int TT_M>
+struct VecProductQuantizer_4_AVX512 : public VecProductQuantizer_NoVec<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i> {
+
+	VecProductQuantizer_4_AVX512(size_t d) : /* dimensionality of the input vectors */
+		VecProductQuantizer_NoVec<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i>(d) {
+	}
+
+	VecProductQuantizer_4_AVX512() : /* dimensionality of the input vectors */
+		VecProductQuantizer_NoVec<TT_M,2,4,4,0,0,int8_t,__m128i,__m512i>() {
 	}
 
 };
@@ -2321,7 +2873,7 @@ struct VecProductQuantizer_4_SSE128_unsigned : public AbstractVecProductQuantize
 
 		for (size_t j = start_group_index; j <= last_group_index; j++) {
 
-			__m128i candidates = _mm_set1_epi8(1);
+			__m128i candidates = _mm_setzero_si128();
 
 			// Subquantizers 0..SQ_COUNT
 			for(int row_i = 0; row_i < lanes_per_code; ++row_i) {
@@ -2485,6 +3037,7 @@ struct VecProductQuantizer_XYZ_AVX512 : public VecProductQuantizer_NoVecTable<TT
 
 
 #ifdef __AVX512F__
+// Warning, when using this template, PG_1 and PG_2 must be either 5 or 6. A 4 must come last.
 template<int TT_M, int T_PG_1, int T_PG_2, int T_PG_3>
 struct VecProductQuantizer_XYZ_AVX512_unsigned : public AbstractVecProductQuantizer<TT_M,3,T_PG_1,T_PG_2,T_PG_3,0,uint16_t,__m512i,__m512i> {
 
@@ -2495,10 +3048,12 @@ struct VecProductQuantizer_XYZ_AVX512_unsigned : public AbstractVecProductQuanti
 
 	VecProductQuantizer_XYZ_AVX512_unsigned(size_t d) : /* dimensionality of the input vectors */
 		AbstractVecProductQuantizer<TT_M,3,T_PG_1,T_PG_2,T_PG_3,0,uint16_t,__m512i,__m512i>(d) {
+			FAISS_THROW_IF_NOT(T_PG_1 >= 5 && T_PG_2 >= 5 && T_PG_1 <= 6 && T_PG_2 <= 6 && T_PG_3 <= 6);
 	}
 
 	VecProductQuantizer_XYZ_AVX512_unsigned() : /* dimensionality of the input vectors */
 		AbstractVecProductQuantizer<TT_M,3,T_PG_1,T_PG_2,T_PG_3,0,uint16_t,__m512i,__m512i>() {
+			FAISS_THROW_IF_NOT(T_PG_1 >= 5 && T_PG_2 >= 5 && T_PG_1 <= 6 && T_PG_2 <= 6 && T_PG_3 <= 6);
 	}
 
 	//__attribute__((optimize("unroll-loops")))
@@ -2528,7 +3083,7 @@ struct VecProductQuantizer_XYZ_AVX512_unsigned : public AbstractVecProductQuanti
 
 		for (size_t j = start_group_index; j <= last_group_index; j++) {
 
-			__m512i candidates = _mm512_set1_epi16(1);
+			__m512i candidates = _mm512_setzero_si512();
 
 			// Subquantizers 0..SQ_COUNT
 			for(int row_i = 0; row_i < lanes_per_code; ++row_i) {
@@ -2607,6 +3162,125 @@ struct VecProductQuantizer_XYZ_AVX512_unsigned : public VecProductQuantizer_NoVe
 
 #ifdef __AVX512F__
 template<int TT_M>
+struct VecProductQuantizer_4444_AVX512_unsigned : public AbstractVecProductQuantizer<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i> {
+
+	typedef typename AbstractVecProductQuantizer<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i>::group group;
+	typedef typename AbstractVecProductQuantizer<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i>::VPQQuant VPQQuant;
+
+
+
+	VecProductQuantizer_4444_AVX512_unsigned(size_t d) : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i>(d) {
+	}
+
+	VecProductQuantizer_4444_AVX512_unsigned() : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i>() {
+	}
+
+	//__attribute__((optimize("unroll-loops")))
+	inline void lookup_and_update_heap_simd(size_t ncodes, size_t offset, const group * __restrict codes,
+		                                                 const float * __restrict dis_table, __m512i *__restrict mm_dis_tables, VPQQuant * qmax,
+														 int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
+														 long key, const long* list_ids, bool store_pairs) const override {
+
+		// Access static member of super class (shortcut)
+		constexpr int codes_per_group = AbstractVecProductQuantizer<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i>::codes_per_group;
+		constexpr int lanes_per_code = AbstractVecProductQuantizer<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i>::lanes_per_code;
+
+		// Mask
+		__m512i mask_4bit=_mm512_set1_epi16(0x000f);
+
+		// Binheap extraction
+		uint16_t bh_bound_quant;
+		qmax->quantize_sum(heap_dis[0]-dis0, &bh_bound_quant);
+		__m512i bh_bound_av512 = _mm512_set1_epi16(bh_bound_quant);
+
+		int start_group_index = offset / codes_per_group;
+		int start_index_in_group = offset % codes_per_group;
+
+		int last_group_index = (offset+ncodes-1)/codes_per_group;
+		int last_index_in_group = (offset+ncodes-1) % codes_per_group;
+
+		int start_mask=~((1 << start_index_in_group)-1);  //2 => 0b0000011 => 0b11111100;
+		int end_mask=((1 <<(last_index_in_group+1)) -1); //2 => 3 => 0b0000111
+
+
+		for (size_t j = start_group_index; j <= last_group_index; j++) {
+
+			__m512i candidates = _mm512_setzero_si512();
+
+			// Subquantizers 0..SQ_COUNT
+			for(int row_i = 0; row_i < lanes_per_code; ++row_i) {
+				const int offset_1 = 1;
+				const int offset_2 = 1 + offset_1;
+				const int offset_3 = 1 + offset_2;
+				const int offset_4 = 1 + offset_3;	
+				const int sqdt_i = row_i * (offset_4);
+				__m512i partiala, partialb, partialc, partiald;
+
+				// Subquantizer 0
+				const __m512i comps_012 = _mm512_loadu_si512(&codes[j].mmxl[row_i]);
+				const __m512i comps_0 = _mm512_and_si512(comps_012,mask_4bit);
+				partiala = _mm512_permutexvar_epi16(comps_0,mm_dis_tables[sqdt_i+0]);
+				candidates = _mm512_adds_epu16(candidates, partiala);
+
+				// Subquantizer 1
+				const __m512i comps_1x = _mm512_srli_epi16(comps_012, this->csub_offset_inlane[1]);
+				const __m512i comps_1 = _mm512_and_si512(comps_1x,mask_4bit);
+				partialb = _mm512_permutexvar_epi16(comps_1,mm_dis_tables[sqdt_i+offset_1]);
+				candidates = _mm512_adds_epu16(candidates, partialb);
+
+				// Subquantizer 2
+				const __m512i comps_2x = _mm512_srli_epi16(comps_012, this->csub_offset_inlane[2]);
+				const __m512i comps_2 = _mm512_and_si512(comps_2x,mask_4bit);
+				partialc = _mm512_permutexvar_epi16(comps_2,mm_dis_tables[sqdt_i+offset_2]);
+				candidates = _mm512_adds_epu16(candidates, partialc);
+
+				// Subquantizer 3
+				const __m512i comps_3 = _mm512_srli_epi16(comps_012, this->csub_offset_inlane[3]);
+				//const __m512i comps_3 = _mm512_and_si512(comps_3x,mask_4bit); Not Needed as after last shift no bits remains
+				partiald = _mm512_permutexvar_epi16(comps_3,mm_dis_tables[sqdt_i+offset_3]);
+				candidates = _mm512_adds_epu16(candidates, partiald);
+			}
+
+			// Compare
+			__mmask32 cmp = _mm512_cmplt_epu16_mask(candidates, bh_bound_av512);
+
+			// Apply masks for potentially incomplete first and last groups
+			if(unlikely(j == start_group_index)){
+				cmp &= start_mask;
+			}
+			if(unlikely(j == last_group_index)){
+				cmp &= end_mask;
+			}
+
+			if(cmp){
+				this->extract_val_loop(cmp, candidates, j, store_pairs, key, list_ids, dis0, k, heap_dis, heap_ids, qmax, bh_bound_av512);
+			}
+
+		}
+
+	};
+};
+#else
+template<int TT_M>
+struct VecProductQuantizer_4444_AVX512_unsigned : public VecProductQuantizer_NoVecTable<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i> {
+
+	VecProductQuantizer_4444_AVX512_unsigned(size_t d) : /* dimensionality of the input vectors */
+		VecProductQuantizer_NoVecTable<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i>(d) {
+	}
+
+	VecProductQuantizer_4444_AVX512_unsigned() : /* dimensionality of the input vectors */
+		VecProductQuantizer_NoVecTable<TT_M,4,4,4,4,4,uint16_t,__m512i,__m512i>() {
+	}
+
+};
+
+#endif
+
+
+#ifdef __AVX512F__
+template<int TT_M>
 struct VecProductQuantizer_88_AVX512_unsigned : public AbstractVecProductQuantizer<TT_M,2,8,8,0,0,uint16_t,__m512i,__m512i> {
 
 	typedef typename AbstractVecProductQuantizer<TT_M,2,8,8,0,0,uint16_t,__m512i,__m512i>::group group;
@@ -2647,7 +3321,7 @@ struct VecProductQuantizer_88_AVX512_unsigned : public AbstractVecProductQuantiz
 
 		for (size_t j = start_group_index; j <= last_group_index; j++) {
 
-			__m512i candidates = _mm512_set1_epi16(1);
+			__m512i candidates = _mm512_setzero_si512();
 
 			// Subquantizers 0..SQ_COUNT
 			for(int row_i = 0; row_i < lanes_per_code; ++row_i) {
@@ -2732,6 +3406,131 @@ struct VecProductQuantizer_88_AVX512_unsigned : public VecProductQuantizer_NoVec
 
 
 
+#ifdef __AVX512F__
+template<int TT_M>
+struct VecProductQuantizer_88_AVX512 : public AbstractVecProductQuantizer<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i> {
+
+	typedef typename AbstractVecProductQuantizer<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i>::group group;
+	typedef typename AbstractVecProductQuantizer<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i>::VPQQuant VPQQuant;
+
+	VecProductQuantizer_88_AVX512(size_t d) : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i>(d) {
+	}
+
+	VecProductQuantizer_88_AVX512() : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i>() {
+	}
+
+	//__attribute__((optimize("unroll-loops")))
+	inline void lookup_and_update_heap_simd(size_t ncodes, size_t offset, const group * __restrict codes,
+		                                                 const float * __restrict dis_table, __m512i *__restrict mm_dis_tables, VPQQuant * qmax,
+														 int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
+														 long key, const long* list_ids, bool store_pairs) const override {
+
+		// Access static member of super class (shortcut)
+		constexpr int codes_per_group = AbstractVecProductQuantizer<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i>::codes_per_group;
+		constexpr int lanes_per_code = AbstractVecProductQuantizer<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i>::lanes_per_code;
+
+		// Binheap extraction
+		int16_t bh_bound_quant;
+		qmax->quantize_sum(heap_dis[0]-dis0, &bh_bound_quant);
+		__m512i bh_bound_av512 = _mm512_set1_epi16(bh_bound_quant);
+
+		int start_group_index = offset / codes_per_group;
+		int start_index_in_group = offset % codes_per_group;
+
+		int last_group_index = (offset+ncodes-1)/codes_per_group;
+		int last_index_in_group = (offset+ncodes-1) % codes_per_group;
+
+		int start_mask=~((1 << start_index_in_group)-1);  //2 => 0b0000011 => 0b11111100;
+		int end_mask=((1 <<(last_index_in_group+1)) -1); //2 => 3 => 0b0000111
+
+
+		for (size_t j = start_group_index; j <= last_group_index; j++) {
+
+			__m512i candidates = _mm512_setzero_si512();
+
+			// Subquantizers 0..SQ_COUNT
+			for(int row_i = 0; row_i < lanes_per_code; ++row_i) {
+				const int sqdt_i = row_i * 16;
+
+				const __m512i comps_01 = _mm512_loadu_si512(&codes[j].mmxl[row_i]);
+
+				/* First component */
+				const __m512i bit7_0 = _mm512_slli_epi16(comps_01,9);
+				const __mmask32 bit7_0_m = _mm512_movepi16_mask(bit7_0);
+				const __m512i bit8_0 = _mm512_slli_epi16(comps_01,8);
+				const __mmask32 bit8_0_m = _mm512_movepi16_mask(bit8_0);
+
+				const __m512i partial_0_00 = _mm512_permutex2var_epi16(mm_dis_tables[sqdt_i+0], comps_01, mm_dis_tables[sqdt_i+1]);
+				const __m512i partial_0_01 = _mm512_permutex2var_epi16(mm_dis_tables[sqdt_i+2], comps_01, mm_dis_tables[sqdt_i+3]);
+				const __m512i partial_0_0 = _mm512_mask_blend_epi16(bit7_0_m,partial_0_00,partial_0_01);
+
+				const __m512i partial_0_10 = _mm512_permutex2var_epi16(mm_dis_tables[sqdt_i+4], comps_01, mm_dis_tables[sqdt_i+5]);
+				const __m512i partial_0_11 =_mm512_permutex2var_epi16(mm_dis_tables[sqdt_i+6], comps_01, mm_dis_tables[sqdt_i+7]);
+				const __m512i partial_0_1 = _mm512_mask_blend_epi16(bit7_0_m,partial_0_10,partial_0_11);
+
+				const __m512i partial_0 = _mm512_mask_blend_epi16(bit8_0_m,partial_0_0,partial_0_1);
+
+				/* Second component */
+				const __m512i comps_1 = _mm512_srli_epi16(comps_01, 8);
+				const __m512i bit7_1 = _mm512_slli_epi16(comps_01,1);
+				const __mmask32 bit7_1_m = _mm512_movepi16_mask(bit7_1);
+				const __m512i bit8_1 = comps_01;
+				const __mmask32 bit8_1_m = _mm512_movepi16_mask(bit8_1);
+
+				const __m512i partial_1_00 = _mm512_permutex2var_epi16(mm_dis_tables[sqdt_i+8], comps_1, mm_dis_tables[sqdt_i+9]);
+				const __m512i partial_1_01 = _mm512_permutex2var_epi16(mm_dis_tables[sqdt_i+10], comps_1, mm_dis_tables[sqdt_i+11]);
+				const __m512i partial_1_0 = _mm512_mask_blend_epi16(bit7_1_m,partial_1_00,partial_1_01);
+
+				const __m512i partial_1_10 = _mm512_permutex2var_epi16(mm_dis_tables[sqdt_i+12], comps_1, mm_dis_tables[sqdt_i+13]);
+				const __m512i partial_1_11 =_mm512_permutex2var_epi16(mm_dis_tables[sqdt_i+14], comps_1, mm_dis_tables[sqdt_i+15]);
+				const __m512i partial_1_1 = _mm512_mask_blend_epi16(bit7_1_m,partial_1_10,partial_1_11);
+
+				const __m512i partial_1 = _mm512_mask_blend_epi16(bit8_1_m,partial_1_0,partial_1_1);
+
+				const __m512i partial_sum = _mm512_adds_epi16(partial_0, partial_1);
+				candidates = _mm512_adds_epi16(candidates, partial_sum);
+
+			}
+
+
+			// Compare
+			__mmask32 cmp = _mm512_cmplt_epi16_mask(candidates, bh_bound_av512);
+
+			// Apply masks for potentially incomplete first and last groups
+			if(unlikely(j == start_group_index)){
+				cmp &= start_mask;
+			}
+			if(unlikely(j == last_group_index)){
+				cmp &= end_mask;
+			}
+
+			if(cmp){
+				this->extract_val_loop(cmp, candidates, j, store_pairs, key, list_ids, dis0, k, heap_dis, heap_ids, qmax, bh_bound_av512);
+			}
+
+		}
+
+	};
+};
+#else
+template<int TT_M>
+struct VecProductQuantizer_88_AVX512 : public VecProductQuantizer_NoVecTable<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i> {
+
+	VecProductQuantizer_88_AVX512(size_t d) : /* dimensionality of the input vectors */
+		VecProductQuantizer_NoVecTable<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i>(d) {
+	}
+
+	VecProductQuantizer_88_AVX512() : /* dimensionality of the input vectors */
+		VecProductQuantizer_NoVecTable<TT_M,2,8,8,0,0,int16_t,__m512i,__m512i>() {
+	}
+
+};
+
+#endif
+
+
 
 #ifdef __AVX512VBMI__
 template<int TT_M>
@@ -2774,7 +3573,7 @@ struct VecProductQuantizer_8_AVX512_unsigned : public AbstractVecProductQuantize
 
 		for (size_t j = start_group_index; j <= last_group_index; j++) {
 
-			__m512i candidates = _mm512_set1_epi8(1);
+			__m512i candidates = _mm512_setzero_si512();
 
 			// Subquantizers 0..SQ_COUNT
 			for(int row_i = 0; row_i < lanes_per_code; ++row_i) {
@@ -2823,6 +3622,101 @@ struct VecProductQuantizer_8_AVX512_unsigned : public VecProductQuantizer_NoVecT
 	}
 
 };
+
+
+
+#ifdef __AVX512VBMI__
+template<int TT_M>
+struct VecProductQuantizer_8_AVX512 : public AbstractVecProductQuantizer<TT_M,1,8,0,0,0,int8_t,__m512i,__m512i> {
+
+	typedef typename AbstractVecProductQuantizer<TT_M,1,8,0,0,0,uint8_t,__m512i,__m512i>::group group;
+	typedef typename AbstractVecProductQuantizer<TT_M,1,8,0,0,0,uint8_t,__m512i,__m512i>::VPQQuant VPQQuant;
+	VecProductQuantizer_8_AVX512(size_t d) : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,1,8,0,0,0,int8_t,__m512i,__m512i>(d) {
+	}
+
+	VecProductQuantizer_8_AVX512() : /* dimensionality of the input vectors */
+		AbstractVecProductQuantizer<TT_M,1,8,0,0,0,int8_t,__m512i,__m512i>() {
+	}
+
+	//__attribute__((optimize("unroll-loops")))
+	inline void lookup_and_update_heap_simd(size_t ncodes, size_t offset, const group * __restrict codes,
+		                                                 const float * __restrict dis_table, __m512i *__restrict mm_dis_tables, VPQQuant * qmax,
+														 int k, float * __restrict heap_dis, long* __restrict heap_ids, float dis0,
+														 long key, const long* list_ids, bool store_pairs) const override {
+
+		// Access static member of super class (shortcut)
+		constexpr int codes_per_group = AbstractVecProductQuantizer<TT_M,1,8,0,0,0,int8_t,__m512i,__m512i>::codes_per_group;
+		constexpr int lanes_per_code = AbstractVecProductQuantizer<TT_M,1,8,0,0,0,int8_t,__m512i,__m512i>::lanes_per_code;
+
+		// Binheap extraction
+		int8_t bh_bound_quant;
+		qmax->quantize_sum(heap_dis[0]-dis0, &bh_bound_quant);
+		__m512i bh_bound_av512 = _mm512_set1_epi8(bh_bound_quant);
+
+		int start_group_index = offset / codes_per_group;
+		int start_index_in_group = offset % codes_per_group;
+
+		int last_group_index = (offset+ncodes-1)/codes_per_group;
+		int last_index_in_group = (offset+ncodes-1) % codes_per_group;
+
+		int start_mask=~((1 << start_index_in_group)-1);  //2 => 0b0000011 => 0b11111100;
+		int end_mask=((1 <<(last_index_in_group+1)) -1); //2 => 3 => 0b0000111
+
+
+		for (size_t j = start_group_index; j <= last_group_index; j++) {
+
+			__m512i candidates = _mm512_setzero_si512();
+
+			// Subquantizers 0..SQ_COUNT
+			for(int row_i = 0; row_i < lanes_per_code; ++row_i) {
+				const int sqdt_i = row_i * 4;
+
+				const __m512i comps = _mm512_loadu_si512(&codes[j].mmxl[row_i]);
+				const __mmask64 bit8_m = _mm512_movepi8_mask(comps);
+
+				const __m512i partial_0 = _mm512_permutex2var_epi8(mm_dis_tables[sqdt_i+0], comps, mm_dis_tables[sqdt_i+1]);
+				const __m512i partial_1 = _mm512_permutex2var_epi8(mm_dis_tables[sqdt_i+2], comps, mm_dis_tables[sqdt_i+3]);
+				const __m512i partial_sum = _mm512_mask_blend_epi8(bit8_m,partial_0,partial_1);
+				candidates = _mm512_adds_epi8(candidates, partial_sum);
+
+			}
+
+
+			// Compare
+			__mmask32 cmp = _mm512_cmplt_epi8_mask(candidates, bh_bound_av512);
+
+			// Apply masks for potentially incomplete first and last groups
+			if(unlikely(j == start_group_index)){
+				cmp &= start_mask;
+			}
+			if(unlikely(j == last_group_index)){
+				cmp &= end_mask;
+			}
+
+			if(cmp){
+				this->extract_val_loop(cmp, candidates, j, store_pairs, key, list_ids, dis0, k, heap_dis, heap_ids, qmax, bh_bound_av512);
+			}
+
+		}
+
+	};
+};
+#else
+template<int TT_M>
+struct VecProductQuantizer_8_AVX512 : public VecProductQuantizer_NoVecTable<TT_M,1,8,0,0,0,int8_t,__m512i,__m512i> {
+
+	VecProductQuantizer_8_AVX512(size_t d) : /* dimensionality of the input vectors */
+		VecProductQuantizer_NoVecTable<TT_M,1,8,0,0,0,int8_t,__m512i,__m512i>(d) {
+	}
+
+	VecProductQuantizer_8_AVX512() : /* dimensionality of the input vectors */
+		VecProductQuantizer_NoVecTable<TT_M,1,8,0,0,0,int8_t,__m512i,__m512i>() {
+	}
+
+};
+
+#endif
 
 #endif
 

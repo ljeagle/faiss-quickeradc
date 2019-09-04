@@ -157,7 +157,7 @@ VecProductQuantizer_4_AVX256<16>
 Check [VPQ_Impl.h](./VPQ_Impl.h) for a complete list of available quantizers (mx{6,6,4}, mx{6,5,5}, mx{5,5,5}, mx{8,8}, mx{8}), or if you want to add a new quantizer.
 
 
-## Benchmarks from Technical report
+## Benchmarks
 
 The technical report **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD** relies on code commit *d11c5af*. To reproduce results, you can use the following commands:
 ```
@@ -165,7 +165,7 @@ export PYTHON_PATH=.
 ## For exhaustive search (results are displayed on stdout) on SIFT1M (dataset must be in sift1M folder)
 pyton benchs/bench_vpq_sift1000m.py 
 
-## For non-exhaustive search (commands outputs result files in /tmp for R@1 and R@100)
+## For non-exhaustive search (results are written to files in /tmp for R@1 and R@100)
 # For SIFT1000M (dataset must be in bigann folder)
 python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,VPQ_12x6.6.4_AVX512 autotune
 python benchs/bench_vpq_1bn.py SIFT1000M IMI2x12,VPQ_24x6.6.4_AVX512 autotune
