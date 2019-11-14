@@ -3,7 +3,7 @@
 ## Description
 Quicker ADC is an implementation of fast distance computation techniques for nearest neighbor search in large-scale databases of high-dimensional vectors. It is based upon [Quick ADC](https://github.com/technicolor-research/quick-adc) but provides (i) AVX512 support, (ii) new optimized product quantizers, (iii) full integration with [FAISS](https://github.com/facebookresearch/faiss) from Facebook AI Research. It is thus compatible with Inverted Multi-Indexes and HNSW-based IVFs.
 
-Quicker ADC achieves excellent performance outperforming polysemous codes in numerous configurations. We evaluated its performance for exhaustive search in the [SIFT1M](http://corpus-texmex.irisa.fr/) dataset with both 64-bit and 128-bit codes.
+Quicker ADC achieves excellent performance outperforming polysemous codes in numerous configurations. We evaluated its performance for exhaustive search in the [SIFT1M](http://corpus-texmex.irisa.fr/) and [Deep1M](http://sites.skoltech.ru/compvision/projects/aqtq/) datasets with both 64-bit and 128-bit codes.
 
 ![exhaustive_search_sift1M](img/exhaustive_search_sift1M.png)
 
@@ -18,9 +18,9 @@ We also evaluated its performance for index-based (i.e., non-exhaustive) search 
 The algorithms implemented and complete commented results are described in
 > **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD**  
 > Fabien André, Anne-Marie Kermarrec and Nicolas Le Scouarnec  
-> *arXiv 1812.09162*  
-> December 2018  
-> https://arxiv.org/abs/1812.09162
+> *IEEE Transactions on Pattern Analysis and Machine Intelligence*  
+> Early Access, 2019  
+> Available at https://doi.org/10.1109/TPAMI.2019.2952606 or https://arxiv.org/abs/1812.09162
 
 For more details on FAISS see the main [repository](https://github.com/facebookresearch/faiss) and the faiss's [README.md](README-faiss.md).
 
@@ -37,9 +37,9 @@ If you use or compare to this work, please cite
 
 > **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD**  
 > Fabien André, Anne-Marie Kermarrec and Nicolas Le Scouarnec  
-> *arXiv 1812.09162*  
-> December 2018  
-> https://arxiv.org/abs/1812.09162
+> *IEEE Transactions on Pattern Analysis and Machine Intelligence*  
+> Early Access, 2019  
+> Available at https://doi.org/10.1109/TPAMI.2019.2952606 or https://arxiv.org/abs/1812.09162
  
 > **Accelerated Nearest Neighbor Search with Quick ADC**  
 > Fabien André, Anne-Marie Kermarrec and Nicolas Le Scouarnec  
@@ -159,11 +159,11 @@ Check [VPQ_Impl.h](./VPQ_Impl.h) for a complete list of available quantizers (mx
 
 ## Benchmarks
 
-The technical report **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD** relies on code commit *d11c5af*. To reproduce results, you can use the following commands:
+The technical report **Quicker ADC : Unlocking the hidden potential of Product Quantization with SIMD** relies on code commit *7ff6d*. To reproduce results, you can use the following commands:
 ```
 export PYTHON_PATH=.
-## For exhaustive search (results are displayed on stdout) on SIFT1M (dataset must be in sift1M folder)
-pyton benchs/bench_vpq_sift1000m.py 
+## For exhaustive search (results are displayed on stdout) on SIFT1M and Deep1M (dataset must be in sift1M and deep1M folder)
+pyton benchs/bench_vpq_1m.py 
 
 ## For non-exhaustive search (results are written to files in /tmp for R@1 and R@100)
 # For SIFT1000M (dataset must be in bigann folder)
